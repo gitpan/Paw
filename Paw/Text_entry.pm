@@ -12,32 +12,34 @@ $Paw::VERSION = "0.50";
 
 =head1 Textentry Widget
 
-B<$te=Paw::Text_entry->new($width, [$color], [$name], [\&callback], [$text], [$side], [$echo], [$max_length]);>
+B<$te=Paw::Text_entry->new($width, [$cursor_color], [$color], [$name], [\&callback], [$text], [$side], [$echo], [$max_length] );>
 
 B<Parameter>
 
-     width      => width of the text-entry (in other words: columns)
+     width        => width of the text-entry (in other words: columns)
 
-     color      => the colorpair must be generated with
+     color        => the colorpair must be generated with
                    Curses::init_pair(pair_nr, COLOR_fg, COLOR_bg)
                    [optionally]
 
-     name       => name of the widget [optionally]
+     cursor_color => same like color but only for the cursor
 
-     callback   => reference to the function that will be
+     name         => name of the widget [optionally]
+
+     callback     => reference to the function that will be
                    executed each time you press a key in the entry.
                    [optionally]
 
-     text       => default text for the entry [optionally]
+     text         => default text for the entry [optionally]
 
-     orientation=> "left"(default) or "right"
+     orientation  => "left"(default) or "right"
                    for left/right-justified text.
 
-     echo       => 0, 1  oder 2 : 0=no echo of the entered text,
+     echo         => 0, 1  oder 2 : 0=no echo of the entered text,
                    1=Stars instead of characters, 2=full echo (default)
                    (0 and 1 good for passwords) [optional]
 
-     max_length=> maximum length of the entry (default = 1024)
+     max_length   => maximum length of the entry (default = 1024)
 
 B<Example>
 
@@ -125,6 +127,7 @@ sub new {
     $this->{echo}        = (defined $params{echo})?($params{echo}):(2);
     $this->{max_length}  = (defined $params{max_length})?($params{max_length}):(1024);
     $this->{color_pair}  = (defined $params{color})?($params{color}):();
+    $this->{cursor_color}= (defined $params{cursor_color})?($params{cursor_color}):(undef);
     $this->{act_able}    = 1;
     $this->{rows}        = 1;
     $this->{type}        = 'text_entry';
@@ -198,9 +201,13 @@ sub draw {
     if ( $this->{is_act} ) {
         attron(A_REVERSE);
         for ( my $i=0; $i<$this->{cols}; $i++ ) {
-            attroff(A_REVERSE) if ( $this->{cursor}->{rcx} == $i );
+	    if ( $this->{cursor}->{rcx} == $i ) {
+		attroff(A_REVERSE);
+		attron(COLOR_PAIR($this->{cursor_color})) if ( defined $this->{cursor_color} );
+	    }
             my $subst=substr($this->{text}, $i, 1);
             addch( $subst );
+	    attron(COLOR_PAIR($this->{color_pair}));
             attron(A_REVERSE);
         }
     }
@@ -239,10 +246,8 @@ sub key_press {
     my $new_string = $this->{string};
     $key=&{$this->{callback}}($this, $key) if ( defined $this->{callback} );
     while ( $key ne KEY_UP and $key ne KEY_DOWN and $key ne "\t" and $key ne "\n") {
-	print STDERR $key;
         if ( $key eq KEY_BACKSPACE ) {
             $key = '';
-	    print STDERR "jo";
             $new_string = ( substr($new_string,0,$vcx-1) . substr($new_string,$vcx) ) if ( $vcx );
             $vcx-- if ( $vcx > 0 );
             $rcx-- if ( $rcx > 0 and $this->{side} eq 'left' );

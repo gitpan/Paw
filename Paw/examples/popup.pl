@@ -50,7 +50,7 @@ $label = Paw::Label->new(text=>"Enter Popup-Dialog");
 #
 @buttons = ( "Ok", "Cancel", "don't know" );
 $text = ("This is a Popup-Dialog with some buttons.\nNow go ! Leave me alone.");
-$pop = Paw::Popup->new( shade=>1, buttons=>\@buttons, text=>\$text );
+$pop = Paw::Popup->new( abs_y=>5,shade=>1, buttons=>\@buttons, text=>\$text );
 
 $win->abs_move_curs(new_y=>1); #Bug =:-(
 

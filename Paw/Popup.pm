@@ -72,16 +72,28 @@ sub new {
     $this->{name}    = (defined $params{name})?($params{name}):('_auto_popup');
     $this->{cols}    = (defined $params{width})?($params{width}):($this->{screen_cols}/2);
     $this->{rows}    = (defined $params{height})?($params{height}):($this->{screen_rows}/2);
+    $this->{x_pos}   = (defined $params{abs_x})?($params{abs_x}):(($this->{screen_cols}-$this->{cols})/2);
+    $this->{y_pos}   = (defined $params{abs_y})?($params{abs_y}):(($this->{screen_rows}-$this->{rows})/2);
+
     $this->{buttons} = $params{buttons};
     $this->{text}    = $params{text};
 
-    $window = Paw::Window->new( abs_x   => ($this->{screen_cols}-$this->{cols})/2, 
-				abs_y   => ($this->{screen_rows}-$this->{rows})/2, 
-				callback=> $cb, 
+    # backwards compatibility
+    if ( ref $params{text} eq 'ARRAY' ) {
+	my $dummy;
+	foreach ( @{$this->{text}} ) {
+	    $dummy .= $_;
+	}
+	$this->{text} = \$dummy;
+    }
+
+    $window = Paw::Window->new( abs_x   => $this->{x_pos}, 
+				abs_y   => $this->{y_pos}, 
+				callback=> $cb,
 				height  => $this->{rows}, width=>$this->{cols} );
     $window->set_border();
     $window->set_border('shade') if defined $params{shade};
-    $textbox = Paw::Textbox->new( text     => \${$params{text}}, 
+    $textbox = Paw::Textbox->new( text     => $this->{text}, 
 				  width    => $this->{cols}-2, 
 				  height   => $this->{rows}-5, 
 				  wordwrap => 1 );
@@ -99,7 +111,6 @@ sub new {
         $window->put_dir('h');
 	$button_cols += $temp->{cols}+2;
     }
-    print STDERR $button_cols." ".$this->{cols};
     $this->{window}  = $window;
     $this->{buttons} = \@buttons;
     return $this;

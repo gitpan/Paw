@@ -11,17 +11,26 @@
 
 =head1 Textbox
 
-B<$popup=Paw::Textbox->new($height, $width, \$text, [$name], [$edit]);>
+B<$popup=Paw::Textbox->new($height, $width, \$text, [$color], [$cursor_color], [$name], [$edit]);>
 
 B<Parameter>
 
-     $height => number of rows
+     $height       => number of rows
 
-     $width  => number of columns
+     $width        => number of columns
 
-     \$text  => reference to a scalar that contains the text.
+     \$text        => reference to a scalar that contains the text.
 
-     $edit   => text edit able (0/1) default is 0
+     $edit         => text edit able (0/1) default is 0
+
+     $color        => the colorpair must be generated with
+                      Curses::init_pair(pair_nr, COLOR_fg, COLOR_bg)
+                      [optionally]
+
+     $cursor_color => same like color but only for the cursor
+
+     $name         => Name of the widget [optionally]
+
 
 B<Example>
 
@@ -43,7 +52,6 @@ use Curses;
 use strict;
 
 @Paw::Textbox::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
 
 sub new {
     my $class  = shift;
@@ -57,6 +65,8 @@ sub new {
     $this->{act_able}    = 1;
     $this->{direction}   = 'v';
     $this->{array_is_dirty} = 1;
+    $this->{color_pair} = (defined $params{color})?($params{color}):(undef);
+    $this->{cursor_color}= (defined $params{cursor_color})?($params{cursor_color}):(undef);
 
     bless ($this, $class);
     $this->{text}     = $params{text};
@@ -70,6 +80,8 @@ sub draw {
     my $this       = shift;
     my $print_line = shift;
     my $tl = $this->{top_line};
+    $this->{color_pair} = $this->{parent}->{color_pair} if ( not defined $this->{color_pair} );
+    attron(COLOR_PAIR($this->{color_pair}));
 
     my @text;
     if ( $this->{array_is_dirty} == 1 ) {
@@ -107,8 +119,10 @@ sub draw {
 	$str =~ s/\t/        /g;
 	addstr( substr $str,0,$cursor_char );
 	attron( A_REVERSE );
+	attron(COLOR_PAIR($this->{cursor_color})) if ( defined $this->{cursor_color} );
 	addstr( substr $str,$cursor_char, 1);
 	attroff( A_REVERSE );
+	attron(COLOR_PAIR($this->{color_pair}));
 	addstr( substr $str,$cursor_char+1 ) if ( length($str) >= $cursor_char+1);
 	addstr( ' 'x( $this->{cols}-(length $str) ) );
     }

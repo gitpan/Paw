@@ -15,10 +15,11 @@ use Paw::Scrollbar;
 
 
 ($columns, $rows)=Paw::init_widgetset;
+init_pair(2, COLOR_BLACK, COLOR_YELLOW );
 
 $win=Paw::Window->new(height=>$rows, width=>$columns);
 $text = "first Line\nSecond Line\nblabla\nblablabla\nblupp\nvery creative :-)";
-$box=Paw::Textbox->new(text=>\$text, width=>30, height=>5, edit=>1);
+$box=Paw::Textbox->new(cursor_color=>2, text=>\$text, width=>30, height=>5, edit=>1);
 $box->set_border();
 
 #$sb=Paw::Scrollbar->new(widget=>$box);

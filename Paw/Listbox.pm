@@ -127,6 +127,7 @@ sub new {
     $this->{cols}         = $params{width};
     $this->{rows}         = $params{height};
     $this->{colored}      = (defined $params{colored})?($params{colored}):(0);
+    $this->{callback}     = (defined $params{callback})?($params{callback}):(undef);
     $this->{data}         = \@label;
     $this->{colors}       = \@colors;
     $this->{direction}    = 'v';
@@ -261,6 +262,8 @@ sub key_press {
     my $active_row = $this->{active_row};
 
     $key = '' if not defined $key;
+#    $key=&{$this->{callback}}($this, $key) if ( defined $this->{callback} );
+
     if ( $key eq KEY_DOWN and ($active_row < $this->{used_rows}-1) ) {
         $this->{active_row}++;
         if ( $this->{view_end} < $active_row+2 ) {

@@ -17,6 +17,7 @@ Paw/examples/text_box.pl
 Paw/examples/scroller.pl
 Paw/examples/demo.pl
 Paw/examples/progressbar.pl
+Paw/examples/Popup_menu.pl
 Paw/Box.pm
 Paw/Button.pm
 Paw/Container.pm
@@ -27,6 +28,7 @@ Paw/Listbox.pm
 Paw/Menu.pm
 Paw/Penguin.pm
 Paw/Popup.pm
+Paw/Popup_menu.pm
 Paw/Progressbar.pm
 Paw/Radiobutton.pm
 Paw/Scrollbar.pm
