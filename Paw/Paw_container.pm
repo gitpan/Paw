@@ -9,7 +9,7 @@ use Curses;
 
 @ISA = qw(Exporter);
 @EXPORT = qw();
-$Paw::VERSION = "0.4";
+$Paw::VERSION = "0.41";
 
 sub draw_border {
     my $this  = shift;

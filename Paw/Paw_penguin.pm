@@ -10,7 +10,7 @@ use Curses;
 @ISA = qw(Paw_base);
 @Paw::EXPORT = qw(
 );
-$Paw::VERSION = "0.4";
+$Paw::VERSION = "0.41";
 
 
 sub new {

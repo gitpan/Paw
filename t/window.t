@@ -8,5 +8,3 @@ print "ok 2\n";
 $widget->set_border();
 print "ok 3\n";
 
-$widget->close_win();
-$widget->raise();

@@ -11,8 +11,7 @@ use Paw::Paw_statusbar;
 
 @ISA = qw(Paw_base Paw::Paw_container Exporter );
 @EXPORT = qw();
-$Paw::VERSION = "0.4";
-
+$Paw::VERSION = "0.41";
 
 
 =head1 Window
@@ -62,6 +61,9 @@ B<Parameter>
                         centered or it grows/shrinks with
                         the new terminal size
                         (default is "center") [optionally].
+
+     $title          => Title of the box (will be shown in the top-left
+                        corner of the box [optionally]
 
      \&time_function => This function will be called about
                         every 0,1 seconds as long as

@@ -26,9 +26,6 @@ B<Parameter>
 
      $name        => Name of the box [optionally]
 
-     $title       => Title of the box (will be shown in the top-left
-                     corner of the box [optionally]
-
      $orientation => "topleft", "topright", "bottomleft", "bottomright",
                      "center" and "grow" are the possible parameters.
                      They indicate how the box will behave on
@@ -225,6 +222,6 @@ sub key_press {
 
 @ISA = qw(Exporter Paw_base Paw::Paw_container);
 @EXPORT = qw();
-$Paw::VERSION = "0.4";
+$Paw::VERSION = "0.41";
 
 return 1;
