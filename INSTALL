@@ -12,7 +12,8 @@ make install
 
 you will get some examples in 
 /usr/lib/perl5/site_perl/PERL_VERSION/paw/examples/
-and "perldoc paw_base" will bring up the base documentation. Each widget has it's own documentation:
+and "perldoc paw_base" will bring up the base documentation.
+Each widget has it's own documentation:
 
 perldoc Paw::Paw_button
 perldoc Paw::Paw_label

@@ -16,7 +16,7 @@ require Paw::Paw_scrollbar;
 @ISA = qw(Paw_base Exporter);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 
 =head1 Filedialog

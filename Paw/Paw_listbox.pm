@@ -10,7 +10,7 @@ use Curses;
 @ISA = qw(Paw_base);
 @EXPORT = qw(&new
 );
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 
 =head1 Listbox

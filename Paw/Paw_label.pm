@@ -9,7 +9,7 @@ use Curses;
 @ISA = qw(Exporter);
 @ISA=qw(Paw_base);
 @EXPORT = qw();
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 =head1 Label Widget
 

@@ -9,7 +9,7 @@ use Curses;
 @ISA = qw(Exporter Paw_base);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 sub new {
     my $class  = shift;

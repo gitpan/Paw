@@ -8,7 +8,7 @@ use Carp;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(new_widget_base);
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 package Paw_base;
 use Curses;

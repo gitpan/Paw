@@ -1,8 +1,12 @@
+0.45 - 0.46
++ fixed segfault in window test with old curses-lib - again :-( 
+  thanx again Paul.
+
 0.41 - 0.45
 + cool examples added ;-)
 + abs_move_widget added
 + get_widget_pos added
-+ test's added
++ more test's added
 + set_color added
 
 0.4 - 0.41

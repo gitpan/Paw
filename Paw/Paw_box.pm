@@ -222,6 +222,6 @@ sub key_press {
 
 @ISA = qw(Exporter Paw_base Paw::Paw_container);
 @EXPORT = qw();
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 return 1;

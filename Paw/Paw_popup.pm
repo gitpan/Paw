@@ -11,7 +11,7 @@ use Paw::Paw_window;
 
 @ISA = qw(Exporter Paw_base);
 @EXPORT = qw();
-$Paw::VERSION = "0.45";
+$Paw::VERSION = "0.46";
 
 =head1 Popup Window
 
