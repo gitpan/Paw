@@ -3,19 +3,19 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_listbox;
+package Paw::Listbox;
 use Curses;
 
 @ISA = qw(Exporter);
-@ISA = qw(Paw_base);
+@ISA = qw(Paw);
 @EXPORT = qw(&new
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Listbox
 
-B<$lb=Paw::Paw_listbox->new($height, $width, [$colored], [$name]);>
+B<$lb=Paw::Listbox->new($height, $width, [$colored], [$name]);>
 
 B<Parameter>
 
@@ -30,7 +30,7 @@ B<Parameter>
 
 B<Example>
 
-     $lb=Paw::Paw_listbox->new(width=>10, height=>15, colored=>1);
+     $lb=Paw::Listbox->new(width=>10, height=>15, colored=>1);
 
 =head2 clear_listbox()
 
@@ -105,13 +105,21 @@ returns an array of two values, the x-position and the y-position of the widget.
 
 B<Example>
 
-     ($xpos,$ypos)=$listbox->get_widget_pos();      #y-pos is the same
+     ($xpos,$ypos)=$listbox->get_widget_pos();
+
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 =cut
 
 sub new {
     my $class = shift;
-    my $this = Paw_base->new_widget_base;
+    my $this = Paw->new_widget_base;
     my %params = @_;
     my @label  = ();
     my @pushed = ();

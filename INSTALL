@@ -11,22 +11,23 @@ make test
 make install
 
 you will get some examples in 
-/usr/lib/perl5/site_perl/PERL_VERSION/paw/examples/
-and "perldoc paw_base" will bring up the base documentation.
+/usr/lib/perl5/site_perl/PERL_VERSION/Paw/examples/
+and "perldoc Paw" will bring up the base documentation.
 Each widget has it's own documentation:
 
-perldoc Paw::Paw_button
-perldoc Paw::Paw_label
-perldoc Paw::Paw_scrollbar
-perldoc Paw::Paw_listbox
-perldoc Paw::Paw_line
-perldoc Paw::Paw_box
-perldoc Paw::Paw_radiobutton
-perldoc Paw::Paw_textbox
-perldoc Paw::Paw_filedialog
-perldoc Paw::Paw_popup
-perldoc Paw::Paw_menu
-perldoc Paw::Paw_text_entry
+perldoc Paw
+perldoc Paw::Button
+perldoc Paw::Label
+perldoc Paw::Scrollbar
+perldoc Paw::Listbox
+perldoc Paw::Line
+perldoc Paw::Box
+perldoc Paw::Radiobutton
+perldoc Paw::Textbox
+perldoc Paw::Filedialog
+perldoc Paw::Popup
+perldoc Paw::Menu
+perldoc Paw::Text_entry
 
 
 Please provide feedback - good or bad. (Bad I will try to fix, good makes

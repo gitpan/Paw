@@ -9,19 +9,19 @@
 # just for fun .... 
 #
 use Curses;
-use Paw_base;
-use Paw::Paw_window;
-use Paw::Paw_line;
-use Paw::Paw_label;
+use Paw;
+use Paw::Window;
+use Paw::Line;
+use Paw::Label;
 
 *PI = \3.1415927;
     
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 init_pair(2, COLOR_WHITE, COLOR_BLACK);
 init_pair(3, COLOR_CYAN, COLOR_BLACK);
 init_pair(4, COLOR_GREEN, COLOR_BLACK);
-$win=Paw::Paw_window->new(height=>$rows, width=>$columns, color=>2, orientation=>"grow", time_function=>\&tf);
-$line0=Paw::Paw_line->new(length=>$columns);
+$win=Paw::Window->new(height=>$rows, width=>$columns, color=>2, orientation=>"grow", time_function=>\&tf);
+$line0=Paw::Line->new(length=>$columns);
 
 $scr_x = $columns/2;
 $scr_y = $rows/2;
@@ -34,7 +34,7 @@ for ( my $i=0; $i<$points; $i++ ) {
     $point{$i}{xx} = int(rand 1000)-500;
     $point{$i}{yy} = int(rand 1000)-500;
     $point{$i}{zz} = 1+int(rand 1000);
-    $point{$i}{ref} = Paw::Paw_label->new(text=>".");
+    $point{$i}{ref} = Paw::Label->new(text=>".");
     $win->put($point{$i}{ref});
 }
 
@@ -45,7 +45,7 @@ $logo{2}{data} = " / /__/ / _ \\/ // /\\ \\/ /";
 $logo{3}{data} = "/____/_/_//_/\\___/ /_/\\_\\";
 
 for ( my $i=0; $i<4; $i++ ) {
-    $logo{$i}{ref} = Paw::Paw_label->new(text=>$logo{$i}{data});
+    $logo{$i}{ref} = Paw::Label->new(text=>$logo{$i}{data});
     $win->put($logo{$i}{ref});
 }
 
@@ -55,7 +55,7 @@ $dist = 8;
 
 $text_data = " just a little Demo ! I am working on phong shaded vectors ;-)";
 for ( my $i=0; $i < length $text_data; $i++ ) {
-    $char{$i} = Paw::Paw_label->new(color=>4, text=>(substr $text_data, (length $text_data)-$i-1, 1) );
+    $char{$i} = Paw::Label->new(color=>4, text=>(substr $text_data, (length $text_data)-$i-1, 1) );
     $win->put( $char{$i} );
     $char{$i}->abs_move_widget(new_x=>($columns-$i-3));
 }
@@ -68,7 +68,7 @@ $line0->abs_move_widget(new_x=>0, new_y=>9);
 
 $text_data2 = " Sinus Scroller ----------- ";
 for ( my $i=0; $i < length $text_data2; $i++ ) {
-    $char2{$i} = Paw::Paw_label->new(text=>(substr $text_data2, (length $text_data2)-$i-1, 1), color=>3 );
+    $char2{$i} = Paw::Label->new(text=>(substr $text_data2, (length $text_data2)-$i-1, 1), color=>3 );
     $win->put( $char2{$i} );
     $char2{$i}->abs_move_widget( new_x=>$columns-($i*2) );
 }

@@ -11,13 +11,12 @@ MSG
     exit;
 }
 
-require Paw_base;
 use ExtUtils::MakeMaker;
 $verbose = 1;
 WriteMakefile(
   NAME => "Paw",
   DISTNAME => "Paw",
-  VERSION_FROM => 'Paw_base.pm',
+  VERSION_FROM => 'Paw.pm',
   MAN1PODS => { },
   MAN3PODS => { },
   'dist' => {COMPRESS=>'gzip -9f', SUFFIX => 'gz'}

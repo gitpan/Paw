@@ -1,9 +1,9 @@
 print "1..7\n";
-use Paw_base;
-use Paw::Paw_listbox;
+use Paw;
+use Paw::Listbox;
 print "ok 1\n";
 
-$lb = Paw::Paw_listbox->new(height=>10, width=>10, colored=>0, name=>"lb");
+$lb = Paw::Listbox->new(height=>10, width=>10, colored=>0, name=>"lb");
 print "ok 2\n" if ( $lb->{name} eq "lb" );    
 
 $lb->add_row("test");                    	

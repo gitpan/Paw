@@ -3,25 +3,25 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_filedialog;
+package Paw::Filedialog;
 use Curses;
-require Paw::Paw_window;
-require Paw::Paw_listbox;
-require Paw::Paw_button;
-require Paw::Paw_label;
-require Paw::Paw_text_entry;
-require Paw::Paw_line;
-require Paw::Paw_scrollbar;
+require Paw::Window;
+require Paw::Listbox;
+require Paw::Button;
+require Paw::Label;
+require Paw::Text_entry;
+require Paw::Line;
+require Paw::Scrollbar;
 
-@ISA = qw(Paw_base Exporter);
+@ISA = qw(Paw Exporter);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Filedialog
 
-B<$fd=Paw::Paw_filedialog->new([$height], [$width], [$name], [$dir])>;
+B<$fd=Paw::Filedialog->new([$height], [$width], [$name], [$dir])>;
 
 B<Parameter>
 
@@ -38,7 +38,7 @@ When the filedialogbox is closed by the "ok"-button, it returns an array of all 
 
 B<Example>
 
-     $fd=Paw::Paw_filedialog->new(dir=>"/etc");
+     $fd=Paw::Filedialog->new(dir=>"/etc");
 
 =head2 set_dir($path)
 
@@ -63,15 +63,23 @@ Raises the filedialog. If the box is closed by the "ok-button", it returns an
 array of all marked filenames (without path). If the box is closed by the "cancel-button",
 no return of the marked files takes place.
 
-B<Beispiel>
+B<Example>
 
      @files=$fd->draw();
+
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base();
+    my $this   = Paw->new_widget_base();
     my %params = @_;
     my $cb     = \&_callback;
     
@@ -81,19 +89,19 @@ sub new {
     $this->{cols} = (defined $params{width})?($params{width}):(30);
     $this->{type} = "filedialog";
 
-    my $window = Paw::Paw_window->new( abs_x=>($this->{screen_cols}-$this->{cols})/2, abs_y=>($this->{screen_rows}-$this->{rows})/2, callback=>$cb, height=>$this->{rows}, width=>$this->{cols}, orientation=>"grow" );
+    my $window = Paw::Window->new( abs_x=>($this->{screen_cols}-$this->{cols})/2, abs_y=>($this->{screen_rows}-$this->{rows})/2, callback=>$cb, height=>$this->{rows}, width=>$this->{cols}, orientation=>"grow" );
     $window->{parent} = $this;
     $window->set_border("shade");
-    my $label=Paw::Paw_label->new(text=>"Path: ");
-    my $entry=Paw::Paw_text_entry->new(name=>"__fd_entry", text=>$this->{dir}, width=>22, echo=>2);
-    my $line=Paw::Paw_line->new(char=>ACS_HLINE, length=>$this->{cols});
-    my $list=Paw::Paw_listbox->new(name=>"__fd_listbox", width=>28, height=>$this->{rows}-7,colored=>1);
+    my $label=Paw::Label->new(text=>"Path: ");
+    my $entry=Paw::Text_entry->new(name=>"__fd_entry", text=>$this->{dir}, width=>22, echo=>2);
+    my $line=Paw::Line->new(char=>ACS_HLINE, length=>$this->{cols});
+    my $list=Paw::Listbox->new(name=>"__fd_listbox", width=>28, height=>$this->{rows}-7,colored=>1);
     $list->set_border();
-    my $ok=Paw::Paw_button->new(text=>"Ok");
+    my $ok=Paw::Button->new(text=>"Ok");
     $ok->set_border("shade");
-    my $cancel=Paw::Paw_button->new(text=>"Cancel");
+    my $cancel=Paw::Button->new(text=>"Cancel");
     $cancel->set_border("shade");
-    my $sb=Paw::Paw_scrollbar->new(widget=>$list);
+    my $sb=Paw::Scrollbar->new(widget=>$list);
 
     $window->put_dir("h");
     $window->abs_move_curs(new_x=>1,new_y=>0);

@@ -11,16 +11,16 @@
 # insert text on your own risk !
 # displaying of text should work
 #
-use Paw_base;           # needed for widgets
+use Paw;           # needed for widgets
 use Curses;             # needed for getch() and more
-use Paw::Paw_textbox;
-use Paw::Paw_window;
-use Paw::Paw_scrollbar;
+use Paw::Textbox;
+use Paw::Window;
+use Paw::Scrollbar;
 
 
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 
-$win=Paw::Paw_window->new(height=>$rows, width=>$columns);
+$win=Paw::Window->new(height=>$rows, width=>$columns);
 
 #@text=();
 #$text[0]="Ignored; for Unix";
@@ -29,9 +29,9 @@ $win=Paw::Paw_window->new(height=>$rows, width=>$columns);
 #$text[3]="Many  of  the special xterm features may be modified under";
 #$text[4]="In VT102 mode, there are escape sequences to activate and";
 $text="widget to buggy ... sorry";
-$box=Paw::Paw_textbox->new(data=>\$text, width=>30, height=>5, wordwrap=>0);
+$box=Paw::Textbox->new(data=>\$text, width=>30, height=>5, wordwrap=>0);
 $box->set_border();
-$sb=Paw::Paw_scrollbar->new(widget=>$box);
+$sb=Paw::Scrollbar->new(widget=>$box);
 
 $win->abs_move_curs(new_y=>2);
 $win->put($box);

@@ -7,38 +7,38 @@
 #
 #
 use Curses;
-use Paw_base;
-use Paw::Paw_button;
-use Paw::Paw_box;
-use Paw::Paw_window;
+use Paw;
+use Paw::Button;
+use Paw::Box;
+use Paw::Window;
 
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 
-$win = Paw::Paw_window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>1, orientation=>"grow");
-$vbox0 = Paw::Paw_box->new(direction=>"v", parent=>$win, name=>"vbox0", orientation=>"topleft");
-$vbox1 = Paw::Paw_box->new(direction=>"v", parent=>$win, name=>"vbox1", orientation=>"topleft");
-$hbox0 = Paw::Paw_box->new(direction=>"h", parent=>$win, name=>"hbox0", orientation=>"topleft");
-$hbox1 = Paw::Paw_box->new(direction=>"h", parent=>$win, name=>"hbox1", orientation=>"topleft");
+$win = Paw::Window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>1, orientation=>"grow");
+$vbox0 = Paw::Box->new(direction=>"v", parent=>$win, name=>"vbox0", orientation=>"topleft");
+$vbox1 = Paw::Box->new(direction=>"v", parent=>$win, name=>"vbox1", orientation=>"topleft");
+$hbox0 = Paw::Box->new(direction=>"h", parent=>$win, name=>"hbox0", orientation=>"topleft");
+$hbox1 = Paw::Box->new(direction=>"h", parent=>$win, name=>"hbox1", orientation=>"topleft");
 
 
 ###########################################
 # creating all the buttons
 ###########################################
-my $b1 = Paw::Paw_button->new(text=>"1", callback=>(\&add_butt), name=>"1" );
+my $b1 = Paw::Button->new(text=>"1", callback=>(\&add_butt), name=>"1" );
 $b1->set_border();
-my $b2 = Paw::Paw_button->new(text=>"2", callback=>(\&del_butt), name=>"2" );
+my $b2 = Paw::Button->new(text=>"2", callback=>(\&del_butt), name=>"2" );
 $b2->set_border();
-my $b3 = Paw::Paw_button->new(text=>"3", callback=>(\&add_butt), name=>"3" );
+my $b3 = Paw::Button->new(text=>"3", callback=>(\&add_butt), name=>"3" );
 $b3->set_border();
-my $b4 = Paw::Paw_button->new(text=>"4", callback=>(\&del_butt), name=>"4" );
+my $b4 = Paw::Button->new(text=>"4", callback=>(\&del_butt), name=>"4" );
 $b4->set_border();
-my $b5 = Paw::Paw_button->new(text=>"5", callback=>(\&add_butt), name=>"5" );
+my $b5 = Paw::Button->new(text=>"5", callback=>(\&add_butt), name=>"5" );
 $b5->set_border();
-my $b6 = Paw::Paw_button->new(text=>"6", callback=>(\&del_butt), name=>"6" );
+my $b6 = Paw::Button->new(text=>"6", callback=>(\&del_butt), name=>"6" );
 $b6->set_border();
-my $b7 = Paw::Paw_button->new(text=>"7", callback=>(\&add_butt), name=>"7" );
+my $b7 = Paw::Button->new(text=>"7", callback=>(\&add_butt), name=>"7" );
 $b7->set_border();
-my $b8 = Paw::Paw_button->new(text=>"8", callback=>(\&del_butt), name=>"8" );
+my $b8 = Paw::Button->new(text=>"8", callback=>(\&del_butt), name=>"8" );
 $b8->set_border();
 
 $win->abs_move_curs(new_y=>1); # hm..

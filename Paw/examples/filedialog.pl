@@ -4,33 +4,33 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-use Paw_base;    # needed for widgets
+use Paw;    # needed for widgets
 use Curses;      # needed for getch() and more
-use Paw::Paw_button;
-use Paw::Paw_text_entry;
-use Paw::Paw_label;
-use Paw::Paw_window;
-use Paw::Paw_filedialog;
+use Paw::Button;
+use Paw::Text_entry;
+use Paw::Label;
+use Paw::Window;
+use Paw::Filedialog;
 
 
 #
 # init - as always
 #
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 
 #
 # generate a window with a scoller as statusbar.
 #
 $status="                    test for Statusbar, by the way, F10 is the Quit Key";
-$win=Paw::Paw_window->new(time_function=>\&time_func, quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>\$status, orientation=>"grow");
+$win=Paw::Window->new(time_function=>\&time_func, quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>\$status, orientation=>"grow");
 #
 # Labels, Entrys and all that stuff.
 #
-$label=Paw::Paw_label->new(text=>"Path :");
-$entry=Paw::Paw_text_entry->new(text=>"/", width=>20, echo=>2);
-$button=Paw::Paw_button->new(text=>"Open Filedialog", callback=>\&button_cb);
-$fd=Paw::Paw_filedialog->new(dir=>"/");
-$file_label=Paw::Paw_label->new(text=>"FILES: ");
+$label=Paw::Label->new(text=>"Path :");
+$entry=Paw::Text_entry->new(text=>"/", width=>20, echo=>2);
+$button=Paw::Button->new(text=>"Open Filedialog", callback=>\&button_cb);
+$fd=Paw::Filedialog->new(dir=>"/");
+$file_label=Paw::Label->new(text=>"FILES: ");
 
 #
 # putting

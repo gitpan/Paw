@@ -9,14 +9,14 @@
 # just for fun ....
 #
 use Curses;
-use Paw_base;
-use Paw::Paw_window;
-use Paw::Paw_label;
+use Paw;
+use Paw::Window;
+use Paw::Label;
 
 *PI = \(atan2(1,1)*4);
 
-($columns, $rows)=Paw_base::init_widgetset;
-$win=Paw::Paw_window->new(height=>$rows, width=>$columns, color=>1, orientation=>"grow", time_function=>\&tf);
+($columns, $rows)=Paw::init_widgetset;
+$win=Paw::Window->new(height=>$rows, width=>$columns, color=>1, orientation=>"grow", time_function=>\&tf);
 $text_data=" Circle Scroller";
 $text_data2=" Sinus Scroller";
 $text_data3=" Jump-Scroller";
@@ -37,16 +37,16 @@ $sin_slowness = 8;
 $jump_slowness = 10;
 
 for ( my $i=0; $i < length $text_data; $i++ ) {
-    $char{$i} = Paw::Paw_label->new(text=>(substr $text_data, (length $text_data)-$i-1, 1) );
+    $char{$i} = Paw::Label->new(text=>(substr $text_data, (length $text_data)-$i-1, 1) );
     $win->put( $char{$i} );
 }
 for ( my $i=0; $i < length $text_data2; $i++ ) {
-    $char2{$i} = Paw::Paw_label->new(text=>(substr $text_data2, (length $text_data2)-$i-1, 1) );
+    $char2{$i} = Paw::Label->new(text=>(substr $text_data2, (length $text_data2)-$i-1, 1) );
     $win->put( $char2{$i} );
     $char2{$i}->abs_move_widget( new_x=>$columns-($i*2) );
 }
 for ( my $i=0; $i < length $text_data3; $i++ ) {
-    $char3{$i} = Paw::Paw_label->new(text=>(substr $text_data3, (length $text_data3)-$i-1, 1) );
+    $char3{$i} = Paw::Label->new(text=>(substr $text_data3, (length $text_data3)-$i-1, 1) );
     $win->put( $char3{$i} );
     $char3{$i}->abs_move_widget( new_x=>$columns-($i*3) );
 }

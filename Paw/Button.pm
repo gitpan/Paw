@@ -4,13 +4,13 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 
-package Paw::Paw_button;
+package Paw::Button;
 use Curses;
 
 
 =head1 Button Widget
 
-B<$button=Paw::Paw_button->new([$color], [$name], [\&callback], [$label]);>
+B<$button=Paw::Button->new([$color], [$name], [\&callback], [$label]);>
 
 B<Parameter>
 
@@ -29,7 +29,7 @@ B<Parameter>
 
 B<Example>
 
-     $button=Paw::Paw_button->new(callback=>\&button_callback);
+     $button=Paw::Button->new(callback=>\&button_callback);
 
 B<Callback>
 
@@ -80,7 +80,7 @@ returns an array of two values, the x-position and the y-position of the widget.
 
 B<Example>
 
-     ($xpos,$ypos)=$button->get_widget_pos();      #y-pos is the same
+     ($xpos,$ypos)=$button->get_widget_pos();
 
 =head2 set_color($color_pair)
 
@@ -90,12 +90,20 @@ B<Example>
 
      $button->set_color(3);
 
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
+
 =cut
 
 sub new {
     my $class = shift;
     my %params = @_;
-    my $this = Paw_base->new_widget_base;
+    my $this = Paw->new_widget_base;
 
     $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."button");    #Name des Fensters (nicht Titel)
     $this->{label}     = $params{text};
@@ -181,8 +189,8 @@ sub key_press {
     return $key;
 }
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 return 1;

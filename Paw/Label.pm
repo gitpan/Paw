@@ -3,21 +3,21 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_label;
+package Paw::Label;
 use Curses;
 
 @ISA = qw(Exporter);
-@ISA=qw(Paw_base);
+@ISA=qw(Paw);
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 =head1 Label Widget
 
-B<$label=Paw::Paw_label->new($text, [$color], [$name]);>
+B<$label=Paw::Label->new($text, [$color], [$name]);>
 
 B<Example>
 
-     $label=Paw::Paw_label->new(text=>"Text", color=>3, name=>"Linux_Label");
+     $label=Paw::Label->new(text=>"Text", color=>3, name=>"Linux_Label");
 
 B<Parameter>
 
@@ -60,7 +60,7 @@ returns an array of two values, the x-position and the y-position of the widget.
 
 B<Example>
 
-     ($xpos,$ypos)=$label->get_widget_pos();      #y-pos is the same
+     ($xpos,$ypos)=$label->get_widget_pos();
 
 =head2 set_color($color_pair)
 
@@ -70,12 +70,19 @@ B<Example>
 
      $box->set_color(3);
 
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
     
     $this->{name} = (defined $params{name})?($params{name}):("_auto_"."label");    #Name des Fensters (nicht Titel)

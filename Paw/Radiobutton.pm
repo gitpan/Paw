@@ -3,18 +3,18 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_radiobutton;
+package Paw::Radiobutton;
 use Curses;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Radiobutton Widget
 
-B<$rb=Paw::Paw_radiobutton->new(\@labels, [$direction], [$color], [$name], [\&callback]);>
+B<$rb=Paw::Radiobutton->new(\@labels, [$direction], [$color], [$name], [\&callback]);>
 
 B<Parameter>
 
@@ -35,7 +35,7 @@ B<Parameter>
 B<Example>
 
      @labels=("Red", "Green", "Blue");
-     $rb=Paw::Paw_radiobutton->new(labels=>\@labels, direction=>"v");
+     $rb=Paw::Radiobutton->new(labels=>\@labels, direction=>"v");
 
 B<Callback>
 
@@ -72,7 +72,7 @@ returns an array of two values, the x-position and the y-position of the widget.
 
 B<Example>
 
-     ($xpos,$ypos)=$rb->get_widget_pos();      #y-pos is the same
+     ($xpos,$ypos)=$rb->get_widget_pos();
 
 =head2 set_color($color_pair)
 
@@ -82,13 +82,20 @@ B<Example>
 
      $box->set_color(3);
 
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
     my @label  = @{$params{labels}};
 

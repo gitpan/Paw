@@ -3,20 +3,20 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_menu;
+package Paw::Menu;
 use Curses;
-use Paw::Paw_window;
-use Paw::Paw_button;
+use Paw::Window;
+use Paw::Button;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Pulldown Menu
 
-B<$pdm=Paw::Paw->Paw_menu->new($title, [$name], [$border]);>
+B<$pdm=Paw::Paw->Menu->new($title, [$name], [$border]);>
 
 B<Parameter>
 
@@ -28,7 +28,7 @@ B<Parameter>
 
 B<Example>
 
-     $pdm=Paw::Paw_menu->new(title=>"Datei", border=>"shade");
+     $pdm=Paw::Menu->new(title=>"Datei", border=>"shade");
 
 =head2 add_menu_point($text, \&callback), add_menu_point($other_menu)
 
@@ -46,7 +46,7 @@ B<Example>
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
     my @points = ();
 
@@ -57,7 +57,7 @@ sub new {
     $this->{rows}     = 1;
     $this->{points}   = \@points;
     $this->{type}     = "pull_down_menu";
-    $this->{window}   = Paw::Paw_window->new(name=>"auto_pulldown_window", callback=>(\&_menu_callback), abs_x=>0, abs_y=>0, height=>-1, width=>0, color=>$this->{anz_pairs}-2);
+    $this->{window}   = Paw::Window->new(name=>"auto_pulldown_window", callback=>(\&_menu_callback), abs_x=>0, abs_y=>0, height=>-1, width=>0, color=>$this->{anz_pairs}-2);
     $this->{callback} = \&_menu_callback;
     $this->{color_pair} = $this->{anz_pairs}-2;
     
@@ -134,7 +134,7 @@ sub add_menu_point {
             $this->{cols} = (length $label);
             $this->{window}->{cols} = $this->{cols}+2;
         }
-        $widget=Paw::Paw_button->new(name=>"auto_button_$label", text=>$label, callback=>$callback);
+        $widget=Paw::Button->new(name=>"auto_button_$label", text=>$label, callback=>$callback);
     }
     $this->{window}->{rows} = $this->{window}->{rows}+$widget->{rows};
     $this->{window}->put($widget);

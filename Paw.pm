@@ -8,9 +8,9 @@ use Carp;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(new_widget_base);
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
-package Paw_base;
+package Paw;
 use Curses;
 
 =head1 General
@@ -23,7 +23,7 @@ as well as a complete example for the GUI of a Setup-program (app2.pl).
 
 A new Widget is always created by
 
-     $WIDGET_REFERENCE=Paw::Paw_WIDGETNAME->new(PARAMETERNAME=>VALUE).
+     $WIDGET_REFERENCE=Paw::WIDGETNAME->new(PARAMETERNAME=>VALUE).
 
 The PARAMETERs must be passed as HASH (PARAMETERNAME=>VALUE) to the widget,
 even if there is only one parameter for the widget.
@@ -55,12 +55,12 @@ Every program that uses this modul looks the same in the first lines of code.
      #!/usr/bin/perl
      use Curses;
      use widget;
-     ($columns, $rows)=Paw_base::init_widgetset();
+     ($columns, $rows)=Paw::init_widgetset();
 
 $columns and $rows contains the terminal width and height.
 This values can be used to calculate the size or position of other windows, for example
 
-     $main_win=Paw::Paw_window->new(abs_x=>1, abs_y=>1,
+     $main_win=Paw::Window->new(abs_x=>1, abs_y=>1,
                                height=$rows-3, width=>$columns-2,
                                color=>1, statusbar=>1);
 
@@ -151,6 +151,36 @@ We will get:
      [1]   [5]
      [2][3][6]
      [4]   [7]
+
+=head1 SEE ALSO
+
+Paw::Box          container for other Widgets
+
+Paw::Button       simple Button (optionally with label)
+
+Paw::Filedialog   filedialog Widget
+
+Paw::Label        simple text label
+
+Paw::Line         h/v line (seperator for menus)
+
+Paw::Listbox      box with selectable lines
+
+Paw::Menu         pulldown menus
+
+Paw::Popup        popup window with text and buttons
+
+Paw::Radiobutton  a group of buttons but only one can be selected
+
+Paw::Scrollbar    scrollbar for other widgets (listbox...) no mouse support
+
+Paw::Statusbar    bottomline for windows
+
+Paw::Text_entry   enter one line of text
+
+Paw::Textbox      box with more lines of text (buggy !!!)
+
+Paw::Window       container for other widgets
 
 =head1 COPYRIGHT
 

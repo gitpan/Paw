@@ -5,27 +5,27 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 use Curses;
-use Paw_base;
-use Paw::Paw_label;
-use Paw::Paw_window;
-use Paw::Paw_menu;
+use Paw;
+use Paw::Label;
+use Paw::Window;
+use Paw::Menu;
 
 #
 # init the screen - allways the same.
 #
-($columns, $rows)=Paw_base::init_widgetset();
+($columns, $rows)=Paw::init_widgetset();
 
 #
 # create a window that fills the screen and grows if
 # terminal size changes
 #
-$win=Paw::Paw_window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>1, orientation=>"grow");
+$win=Paw::Window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>1, orientation=>"grow");
 
 #
 # create a menu with the exciting Title "Menu 1". This Title will appear
 # as label on the screen.
 #
-$men=Paw::Paw_menu->new(title=>"Menu 1 ", border=>"shade");
+$men=Paw::Menu->new(title=>"Menu 1 ", border=>"shade");
 
 #
 # add menupoints with the their callback's (totally useless functions, except
@@ -42,7 +42,7 @@ $win->put($men);
 #
 # create another menu. With 2 brandnew menupoints.
 #
-$men2=Paw::Paw_menu->new(title=>"Menue 2 ", border=>"shade");
+$men2=Paw::Menu->new(title=>"Menue 2 ", border=>"shade");
 $men2->add_menu_point("Increment", \&menu_add);
 $men2->add_menu_point("Decrement", \&menu_sub);
 
@@ -53,7 +53,7 @@ $men->add_menu_point($men2);
 # data
 $wert=10;
 # a label
-$label0=Paw::Paw_label->new(text=>"Wert: $wert");
+$label0=Paw::Label->new(text=>"Wert: $wert");
 $win->abs_move_curs(new_x=>5, new_y=>10);
 $win->put($label0);
 

@@ -3,17 +3,17 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_statusbar;
+package Paw::Statusbar;
 use Curses;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
 
     $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."statusbar");    #Name des Fensters (nicht Titel)

@@ -4,12 +4,12 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 
-package Paw::Paw_container;
+package Paw::Container;
 use Curses;
 
 @ISA = qw(Exporter);
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 sub draw_border {
     my $this  = shift;
@@ -215,8 +215,8 @@ sub raise {
         $this->{box_border} = $this->{border};
     }
     if ( defined $this->{statusbar} and $this->{statusbar} ) {
-        $this->{statusbar}=Paw::Paw_box->new(direction=>"h", orientation=>"bottomleft");
-        $this->{statusbar}->put(Paw::Paw_statusbar->new(func_keys=>$this->{func_keys}));
+        $this->{statusbar}=Paw::Box->new(direction=>"h", orientation=>"bottomleft");
+        $this->{statusbar}->put(Paw::Statusbar->new(func_keys=>$this->{func_keys}));
         $this->put($this->{statusbar});
         $this->{statusbar}->{wy}=$this->{rows}-1; #this sucks
         $this->{statusbar}->{wx}=0;             #sorry

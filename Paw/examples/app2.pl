@@ -5,13 +5,13 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 use Curses;
-use Paw_base;
-use Paw::Paw_button;
-use Paw::Paw_text_entry;
-use Paw::Paw_box;
-use Paw::Paw_window;
-use Paw::Paw_label;
-use Paw::Paw_popup;
+use Paw;
+use Paw::Button;
+use Paw::Text_entry;
+use Paw::Box;
+use Paw::Window;
+use Paw::Label;
+use Paw::Popup;
 
 #################################################
 # Data Variable
@@ -35,7 +35,7 @@ $fax_nr           = 0;
 #################################################
 # initialize widgetset
 #################################################
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 init_pair(2, COLOR_CYAN, COLOR_BLACK);    # Textentrys
 init_pair(3, COLOR_WHITE, COLOR_MAGENTA); # Windows
 init_pair(4, COLOR_WHITE, COLOR_RED);     # reenter Password
@@ -43,39 +43,39 @@ init_pair(4, COLOR_WHITE, COLOR_RED);     # reenter Password
 #################################################
 # initialize all Windows
 #################################################
-$mask1_win=Paw::Paw_window->new(abs_x=>int(($columns-60)/2), abs_y=>int(($rows-18)/2), height=>18, width=>60, color=>3, title=>"ISDN-Parameter", orientation=>"center");
+$mask1_win=Paw::Window->new(abs_x=>int(($columns-60)/2), abs_y=>int(($rows-18)/2), height=>18, width=>60, color=>3, title=>"ISDN-Parameter", orientation=>"center");
 $mask1_win->set_border("shade");
-$mask2_win=Paw::Paw_window->new(abs_x=>int(($columns-50)/2), abs_y=>int(($rows-15)/2), height=>15, width=>50, title=>"Netz-Parameter", color=>3, orientation=>"center");
+$mask2_win=Paw::Window->new(abs_x=>int(($columns-50)/2), abs_y=>int(($rows-15)/2), height=>15, width=>50, title=>"Netz-Parameter", color=>3, orientation=>"center");
 $mask2_win->set_border("shade");
-$mask3_win=Paw::Paw_window->new(abs_x=>int(($columns-45)/2), abs_y=>int(($rows-12)/2), height=>11, width=>45, title=>"Fax-Parameter", color=>3, orientation=>"center");
+$mask3_win=Paw::Window->new(abs_x=>int(($columns-45)/2), abs_y=>int(($rows-12)/2), height=>11, width=>45, title=>"Fax-Parameter", color=>3, orientation=>"center");
 $mask3_win->set_border("shade");
-$reenter_win=Paw::Paw_window->new(abs_x=>int(($columns-45)/2), abs_y=>int(($rows-12)/2), height=>13, width=>46, title=>"Passwort verifizieren", color=>4, orientation=>"center");
+$reenter_win=Paw::Window->new(abs_x=>int(($columns-45)/2), abs_y=>int(($rows-12)/2), height=>13, width=>46, title=>"Passwort verifizieren", color=>4, orientation=>"center");
 $reenter_win->set_border("shade");
 
 #################################################
 # Maske 1 - Widgets (ISDN-Parameter)
 #################################################
-$m1_vbox2=Paw::Paw_box->new(name=>"m1_vbox2", direction=>"v", parent=>$mask1_win);
-$m1_hbox0=Paw::Paw_box->new(name=>"m1_hbox0", direction=>"h", parent=>$m1_vbox2);
-$m1_hbox1=Paw::Paw_box->new(name=>"m1_hbox1", direction=>"h", parent=>$m1_vbox2);
-$m1_vbox0=Paw::Paw_box->new(name=>"m1_vbox0", direction=>"v", parent=>$m1_hbox1);
-$m1_vbox1=Paw::Paw_box->new(name=>"m1_vbox1", direction=>"v", parent=>$m1_hbox0);
+$m1_vbox2=Paw::Box->new(name=>"m1_vbox2", direction=>"v", parent=>$mask1_win);
+$m1_hbox0=Paw::Box->new(name=>"m1_hbox0", direction=>"h", parent=>$m1_vbox2);
+$m1_hbox1=Paw::Box->new(name=>"m1_hbox1", direction=>"h", parent=>$m1_vbox2);
+$m1_vbox0=Paw::Box->new(name=>"m1_vbox0", direction=>"v", parent=>$m1_hbox1);
+$m1_vbox1=Paw::Box->new(name=>"m1_vbox1", direction=>"v", parent=>$m1_hbox0);
 
-$m1_abbrechen=Paw::Paw_button->new(text=>"Abbrechen", callback=>\&m1_abbrechen_cb);
+$m1_abbrechen=Paw::Button->new(text=>"Abbrechen", callback=>\&m1_abbrechen_cb);
 $m1_abbrechen->set_border("shade");
-$m1_weiter=Paw::Paw_button->new(name=>"m1_weiter", text=>"Weiter", callback=>\&m1_weiter_cb);
+$m1_weiter=Paw::Button->new(name=>"m1_weiter", text=>"Weiter", callback=>\&m1_weiter_cb);
 $m1_weiter->set_border("shade");
 $m1_hbox1->put($m1_abbrechen);
 $m1_hbox1->rel_move_curs(new_x=>26);
 $m1_hbox1->put($m1_weiter);
 
-$m1_label1 = Paw::Paw_label->new(text=>"Einwahlnummer des Providers : ");
-$m1_label2 = Paw::Paw_label->new(text=>"Eigene MSN                  : ");
-$m1_label3 = Paw::Paw_label->new(text=>"Benutzeraccount fuer syncPPP: ");
-$m1_label4 = Paw::Paw_label->new(text=>"Benutzerpasswort            : ");
-$m1_label5 = Paw::Paw_label->new(text=>"Eigene IP                   : ");
-$m1_label6 = Paw::Paw_label->new(text=>"IP Point2Point Partner      : ");
-$m1_label7 = Paw::Paw_label->new(text=>"IP DNS-Server des Providers : ");
+$m1_label1 = Paw::Label->new(text=>"Einwahlnummer des Providers : ");
+$m1_label2 = Paw::Label->new(text=>"Eigene MSN                  : ");
+$m1_label3 = Paw::Label->new(text=>"Benutzeraccount fuer syncPPP: ");
+$m1_label4 = Paw::Label->new(text=>"Benutzerpasswort            : ");
+$m1_label5 = Paw::Label->new(text=>"Eigene IP                   : ");
+$m1_label6 = Paw::Label->new(text=>"IP Point2Point Partner      : ");
+$m1_label7 = Paw::Label->new(text=>"IP DNS-Server des Providers : ");
 
 $m1_vbox0->put($m1_label1);
 $m1_vbox0->put($m1_label2);
@@ -85,13 +85,13 @@ $m1_vbox0->put($m1_label5);
 $m1_vbox0->put($m1_label6);
 $m1_vbox0->put($m1_label7);
 
-$m1_entry1 = Paw::Paw_text_entry->new(width=>18,color=>2);
-$m1_entry2 = Paw::Paw_text_entry->new(width=>18,color=>2);
-$m1_entry3 = Paw::Paw_text_entry->new(width=>18,color=>2);
-$m1_entry4 = Paw::Paw_text_entry->new(width=>18,color=>2, echo=>1, callback=>\&reenter_password_cb);
-$m1_entry5 = Paw::Paw_text_entry->new(width=>15,color=>2, max_length=>15);
-$m1_entry6 = Paw::Paw_text_entry->new(width=>15,color=>2, max_length=>15);
-$m1_entry7 = Paw::Paw_text_entry->new(width=>15,color=>2, callback=>\&m1_last_entry_cb, max_length=>15);
+$m1_entry1 = Paw::Text_entry->new(width=>18,color=>2);
+$m1_entry2 = Paw::Text_entry->new(width=>18,color=>2);
+$m1_entry3 = Paw::Text_entry->new(width=>18,color=>2);
+$m1_entry4 = Paw::Text_entry->new(width=>18,color=>2, echo=>1, callback=>\&reenter_password_cb);
+$m1_entry5 = Paw::Text_entry->new(width=>15,color=>2, max_length=>15);
+$m1_entry6 = Paw::Text_entry->new(width=>15,color=>2, max_length=>15);
+$m1_entry7 = Paw::Text_entry->new(width=>15,color=>2, callback=>\&m1_last_entry_cb, max_length=>15);
 
 $m1_vbox1->put($m1_entry1);
 $m1_vbox1->put($m1_entry2);
@@ -115,34 +115,34 @@ $mask1_win->put($m1_vbox2);
 #################################################
 # Maske 2 - Widgets (Netz-Parameter)
 #################################################
-$m2_vbox2=Paw::Paw_box->new(name=>"m2_vbox2", direction=>"v", parent=>$mask2_win);
-$m2_hbox0=Paw::Paw_box->new(name=>"m2_hbox0", direction=>"h", parent=>$m2_vbox2);
-$m2_hbox1=Paw::Paw_box->new(name=>"m2_hbox1", direction=>"h", parent=>$m2_vbox2);
-$m2_vbox0=Paw::Paw_box->new(name=>"m2_vbox0", direction=>"v", parent=>$m2_hbox1);
-$m2_vbox1=Paw::Paw_box->new(name=>"m2_vbox1", direction=>"v", parent=>$m2_hbox0);
+$m2_vbox2=Paw::Box->new(name=>"m2_vbox2", direction=>"v", parent=>$mask2_win);
+$m2_hbox0=Paw::Box->new(name=>"m2_hbox0", direction=>"h", parent=>$m2_vbox2);
+$m2_hbox1=Paw::Box->new(name=>"m2_hbox1", direction=>"h", parent=>$m2_vbox2);
+$m2_vbox0=Paw::Box->new(name=>"m2_vbox0", direction=>"v", parent=>$m2_hbox1);
+$m2_vbox1=Paw::Box->new(name=>"m2_vbox1", direction=>"v", parent=>$m2_hbox0);
 
-$m2_weiter=Paw::Paw_button->new(name=>"m2_weiter", text=>"Weiter", callback=>\&m2_weiter_cb);
+$m2_weiter=Paw::Button->new(name=>"m2_weiter", text=>"Weiter", callback=>\&m2_weiter_cb);
 $m2_weiter->set_border("shade");
-$m2_zurueck=Paw::Paw_button->new(text=>"Zurueck", callback=>\&m2_zurueck_cb);
+$m2_zurueck=Paw::Button->new(text=>"Zurueck", callback=>\&m2_zurueck_cb);
 $m2_zurueck->set_border("shade");
 $m2_hbox1->put($m2_zurueck);
 $m2_hbox1->rel_move_curs(new_x=>19);
 $m2_hbox1->put($m2_weiter);
 
-$m2_label1 = Paw::Paw_label->new(text=>"IP-Adresse intern : ");
-$m2_label2 = Paw::Paw_label->new(text=>"Netzmaske intern  : ");
-$m2_label3 = Paw::Paw_label->new(text=>"Hostname          : ");
-$m2_label4 = Paw::Paw_label->new(text=>"Domainname        : ");
+$m2_label1 = Paw::Label->new(text=>"IP-Adresse intern : ");
+$m2_label2 = Paw::Label->new(text=>"Netzmaske intern  : ");
+$m2_label3 = Paw::Label->new(text=>"Hostname          : ");
+$m2_label4 = Paw::Label->new(text=>"Domainname        : ");
 
 $m2_vbox0->put($m2_label1);
 $m2_vbox0->put($m2_label2);
 $m2_vbox0->put($m2_label3);
 $m2_vbox0->put($m2_label4);
 
-$m2_entry1 = Paw::Paw_text_entry->new(width=>15,color=>2, max_length=>15);
-$m2_entry2 = Paw::Paw_text_entry->new(width=>15,color=>2, max_length=>15);
-$m2_entry3 = Paw::Paw_text_entry->new(width=>18,color=>2);
-$m2_entry4 = Paw::Paw_text_entry->new(width=>18,color=>2,callback=>\&m2_last_entry_cb);
+$m2_entry1 = Paw::Text_entry->new(width=>15,color=>2, max_length=>15);
+$m2_entry2 = Paw::Text_entry->new(width=>15,color=>2, max_length=>15);
+$m2_entry3 = Paw::Text_entry->new(width=>18,color=>2);
+$m2_entry4 = Paw::Text_entry->new(width=>18,color=>2,callback=>\&m2_last_entry_cb);
 
 $m2_vbox1->put($m2_entry1);
 $m2_vbox1->put($m2_entry2);
@@ -164,24 +164,24 @@ $mask2_win->put($m2_vbox2);
 #################################################
 # Maske 3 - Widgets (Fax-Parameter)
 #################################################
-$m3_vbox2=Paw::Paw_box->new(name=>"m3_vbox2", direction=>"v", parent=>$mask3_win);
-$m3_hbox0=Paw::Paw_box->new(name=>"m3_hbox0", direction=>"h", parent=>$m3_vbox2);
-$m3_hbox1=Paw::Paw_box->new(name=>"m3_hbox1", direction=>"h", parent=>$m3_vbox2);
-$m3_vbox0=Paw::Paw_box->new(name=>"m3_vbox0", direction=>"v", parent=>$m3_hbox1);
-$m3_vbox1=Paw::Paw_box->new(name=>"m3_vbox1", direction=>"v", parent=>$m3_hbox0);
+$m3_vbox2=Paw::Box->new(name=>"m3_vbox2", direction=>"v", parent=>$mask3_win);
+$m3_hbox0=Paw::Box->new(name=>"m3_hbox0", direction=>"h", parent=>$m3_vbox2);
+$m3_hbox1=Paw::Box->new(name=>"m3_hbox1", direction=>"h", parent=>$m3_vbox2);
+$m3_vbox0=Paw::Box->new(name=>"m3_vbox0", direction=>"v", parent=>$m3_hbox1);
+$m3_vbox1=Paw::Box->new(name=>"m3_vbox1", direction=>"v", parent=>$m3_hbox0);
 
-$m3_weiter=Paw::Paw_button->new(name=>"m3_weiter",text=>"Ende", callback=>\&m3_weiter_cb);
+$m3_weiter=Paw::Button->new(name=>"m3_weiter",text=>"Ende", callback=>\&m3_weiter_cb);
 $m3_weiter->set_border("shade");
-$m3_zurueck=Paw::Paw_button->new(text=>"zurueck", callback=>\&m3_zurueck_cb);
+$m3_zurueck=Paw::Button->new(text=>"zurueck", callback=>\&m3_zurueck_cb);
 $m3_zurueck->set_border("shade");
 $m3_hbox1->put($m3_zurueck);
 $m3_hbox1->rel_move_curs(new_x=>18);
 $m3_hbox1->put($m3_weiter);
 
-$m3_label1 = Paw::Paw_label->new(text=>"Your own Fax : ");
+$m3_label1 = Paw::Label->new(text=>"Your own Fax : ");
 $m3_vbox0->put($m3_label1);
 
-$m3_entry1 = Paw::Paw_text_entry->new(width=>18,color=>2, callback=>\&m3_last_entry_cb);
+$m3_entry1 = Paw::Text_entry->new(width=>18,color=>2, callback=>\&m3_last_entry_cb);
 $m3_vbox1->put($m3_entry1);
 
 $m3_hbox0->put($m3_vbox0);
@@ -198,12 +198,12 @@ $mask3_win->put($m3_vbox2);
 #################################################
 # reenter Password - Widgets
 #################################################
-$reenter_text = Paw::Paw_label->new(text=>"Please reenter the password");
-$reenter_entry0 = Paw::Paw_text_entry->new(name=>"reenter_entry", width=>18,color=>2, echo=>1);
+$reenter_text = Paw::Label->new(text=>"Please reenter the password");
+$reenter_entry0 = Paw::Text_entry->new(name=>"reenter_entry", width=>18,color=>2, echo=>1);
 $reenter_entry0->set_border();
-$reenter_zurueck=Paw::Paw_button->new(text=>"Cancel", callback=>\&reenter_zurueck_cb);
+$reenter_zurueck=Paw::Button->new(text=>"Cancel", callback=>\&reenter_zurueck_cb);
 $reenter_zurueck->set_border("shade");
-$reenter_weiter=Paw::Paw_button->new(text=>"Ok", callback=>\&reenter_ok_cb);
+$reenter_weiter=Paw::Button->new(text=>"Ok", callback=>\&reenter_ok_cb);
 $reenter_weiter->set_border("shade");
 
 $reenter_win->put_dir("v");
@@ -343,7 +343,7 @@ sub reenter_ok_cb {
     else {                                       #damn, passwords are not equal
         my @buttons = ( "Ok" );
         my @text = ("Your reentered password is not equal to your first entered password.","Please reenter password.");
-        my $pop = Paw::Paw_popup->new( width=>35, height=>10, buttons=>\@buttons, text=>\@text );
+        my $pop = Paw::Popup->new( width=>35, height=>10, buttons=>\@buttons, text=>\@text );
         $pop->draw();
         $reenter_win->set_focus("reenter_entry");
         $reenter_entry0->set_text("");

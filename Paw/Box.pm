@@ -4,16 +4,15 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 
-package Paw::Paw_box;
+package Paw::Box;
 
 use Exporter ();
 use Curses;
-use Paw::Paw_container;
-
+use Paw::Container;
 
 =head1 Box Widget
 
-B<$box=Paw::Paw_box->new($direction, [$name], [$title], [$color], [$orientation])>;
+B<$box=Paw::Box->new($direction, [$name], [$title], [$color], [$orientation])>;
 
 B<Parameter>
 
@@ -37,7 +36,7 @@ B<Parameter>
                      [ optionally ]. 
 B<Example>
 
-     $box=Paw::Paw_box->new(direction=>"v",title=>"Start",color=>1);
+     $box=Paw::Box->new(direction=>"v",title=>"Start",color=>1);
 
 =head2 put($widget)
 
@@ -75,7 +74,7 @@ B<Example>
 
 sub new {
     my $class     = shift;
-    my $this      = {};# Paw_base->new_widget_base();
+    my $this      = {};# Paw->new_widget_base();
     my %params    = @_;
     my @widgets;               #Fensterinhalt - Widgets Pointer
     my @act_wid;
@@ -102,7 +101,7 @@ sub new {
     $this->{group_hash} = \%group;
     $this->{group}      = "_default";
     $this->{set_boxes}  = 1;
-    $this->{event_func} = \&Paw_base::_empty_callback;
+    $this->{event_func} = \&Paw::_empty_callback;
     $this->{prev_wid}  = {rows=>0};
     $this->{prev_wid}  = {cols=>0};
     $this->{growing}   = 1;
@@ -220,8 +219,8 @@ sub key_press {
     return $key;
 }
 
-@ISA = qw(Exporter Paw_base Paw::Paw_container);
+@ISA = qw(Exporter Paw Paw::Container);
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 return 1;

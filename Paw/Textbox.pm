@@ -3,18 +3,18 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_textbox;
+package Paw::Textbox;
 use Curses;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Textbox
 
-B<$popup=Paw::Paw_textbox->new($height, $width, \@data, [$name]);>
+B<$popup=Paw::Textbox->new($height, $width, \@data, [$name]);>
 
 B<Parameter>
 
@@ -29,13 +29,21 @@ B<Example>
 
      @data=("This is free software with ABSOLUTELY NO WARRANTY.",
             "Copyright (C) 1999 Free Software Foundation, Inc.");
-     $pu=Paw::Paw_textbox->new(height=>20, width=>20, data=>\@data);
+     $pu=Paw::Textbox->new(height=>20, width=>20, data=>\@data);
+
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base();
+    my $this   = Paw->new_widget_base();
     my %params = @_;
 
     my %cursor;

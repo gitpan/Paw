@@ -3,20 +3,20 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_window;
+package Paw::Window;
 use Curses;
-use Paw::Paw_container;
-use Paw::Paw_box;
-use Paw::Paw_statusbar;
+use Paw::Container;
+use Paw::Box;
+use Paw::Statusbar;
 
-@ISA = qw(Paw_base Paw::Paw_container Exporter );
+@ISA = qw(Paw Paw::Container Exporter );
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Window
 
-B<$window=Paw::Paw_window->new($height, $width, [$abs_x], [$abs_y], [$color], [$name], [\&callback], [\$statusbar], [$orientation], [\&time_function]);>
+B<$window=Paw::Window->new($height, $width, [$abs_x], [$abs_y], [$color], [$name], [\&callback], [\$statusbar], [$orientation], [\&time_function]);>
 
 B<Parameter>
 
@@ -71,7 +71,7 @@ B<Parameter>
 
 B<Example>
 
-     $window=Paw::Paw_window->new(height=>20, width=>10,
+     $window=Paw::Window->new(height=>20, width=>10,
                                   color=>2, callback=>\&function,
                                   statusbar=>\$status, quit_key=>KEY_F(10));
 
@@ -180,7 +180,7 @@ B<Example>
 
 sub new {
     my $class     = shift;
-    my $this      = Paw_base->new_widget_base;
+    my $this      = Paw->new_widget_base;
     my %params    = @_;
     my @widgets;                           #Fensterinhalt - Widgets Pointer
     my @act_wid;
@@ -189,7 +189,7 @@ sub new {
     my @func_keys_dflt = ( "1=", "2=", "3=", "4=", "5=", "6=", "7=", "8=", "9=Menu", "10=Quit" );
 
     $this->{name}      = $params{name};    #Name des Fensters (nicht Titel)
-    $this->{event_func}= (defined $params{callback})?($params{callback}):(\&Paw_base::Paw_main_loop);
+    $this->{event_func}= (defined $params{callback})?($params{callback}):(\&Paw::Paw_main_loop);
     $this->{ax}        = (defined $params{abs_x})?($params{abs_x}):(0);   #absolute Position im Schirm
     $this->{ay}        = (defined $params{abs_y})?($params{abs_y}):(0);   #    "        "     "    "
     $this->{rows}      = $params{height};  #Fensterhoehe

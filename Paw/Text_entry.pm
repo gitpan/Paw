@@ -3,17 +3,17 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_text_entry;
+package Paw::Text_entry;
 use Curses;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 =head1 Textentry Widget
 
-B<$te=Paw::Paw_text_entry->new($width, [$color], [$name], [\&callback], [$text], [$side], [$echo], [$max_length]);>
+B<$te=Paw::Text_entry->new($width, [$color], [$name], [\&callback], [$text], [$side], [$echo], [$max_length]);>
 
 B<Parameter>
 
@@ -42,7 +42,7 @@ B<Parameter>
 
 B<Example>
 
-     $te=Paw::Paw_text_entry->new(width=>15, text=>"PLEASE ENTER NAME",
+     $te=Paw::Text_entry->new(width=>15, text=>"PLEASE ENTER NAME",
                                   max_length=>25); 
 
 B<Callback>
@@ -83,7 +83,7 @@ returns an array of two values, the x-position and the y-position of the widget.
 
 B<Example>
 
-     ($xpos,$ypos)=$te->get_widget_pos();      #y-pos is the same
+     ($xpos,$ypos)=$te->get_widget_pos();
 
 =head2 set_color($color_pair)
 
@@ -93,13 +93,20 @@ B<Example>
 
      $box->set_color(3);
 
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
 
 =cut
 
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
     my %cursor;
 
@@ -181,6 +188,7 @@ sub draw {
     $this->{string}=$dummy;
     attron(COLOR_PAIR($this->{color_pair}));
     if ( $this->{is_act} ) {
+        attron(A_REVERSE);
         for ( my $i=0; $i<$this->{cols}; $i++ ) {
             attroff(A_REVERSE) if ( $this->{cursor}->{rcx} == $i );
             my $subst=substr($this->{text}, $i, 1);

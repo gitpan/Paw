@@ -3,19 +3,19 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_popup;
+package Paw::Popup;
 use Curses;
-use Paw::Paw_button;
-use Paw::Paw_textbox;
-use Paw::Paw_window;
+use Paw::Button;
+use Paw::Textbox;
+use Paw::Window;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw();
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 =head1 Popup Window
 
-B<$popup=Paw::Paw_popup->new($height, $width, \@buttons, \@text, [$name]);>
+B<$popup=Paw::Popup->new($height, $width, \@buttons, \@text, [$name]);>
 
 B<Parameter>
 
@@ -35,7 +35,7 @@ B<Example>
 
      @butt=("Okay", "Cancel");
      @text=("Don't you really not want to continue ?");
-     $pu=Paw_popup::new(height=>20, width=>20,
+     $pu=Popup::new(height=>20, width=>20,
                         buttons=>\@butt, text=>\@text);
 
 If a button is pressed, the box closes and the number of the button is returned (beginning by 0). 
@@ -48,11 +48,19 @@ B<Example>
 
      $button=$pu->draw();
 
+=head2 set_border(["shade"])
+
+activates the border of the widget (optionally also with shadows). 
+
+B<Example>
+
+     $widget->set_border("shade"); or $widget->set_border();
+
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
     my $window = 0;
     my $textbox= 0;
@@ -66,16 +74,16 @@ sub new {
     $this->{text}    = $params{text};
     bless ($this, $class);
 
-    $window = Paw::Paw_window->new( abs_x=>($this->{screen_cols}-$this->{cols})/2, abs_y=>($this->{screen_rows}-$this->{rows})/2, callback=>$cb, height=>$this->{rows}, width=>$this->{cols} );
+    $window = Paw::Window->new( abs_x=>($this->{screen_cols}-$this->{cols})/2, abs_y=>($this->{screen_rows}-$this->{rows})/2, callback=>$cb, height=>$this->{rows}, width=>$this->{cols} );
     $window->set_border("shade");
-    $textbox = Paw::Paw_textbox->new( data=>\@{$params{text}}, width=>$params{width}-2, height=>($params{height}-5), wordwrap=>1 );
+    $textbox = Paw::Textbox->new( data=>\@{$params{text}}, width=>$params{width}-2, height=>($params{height}-5), wordwrap=>1 );
     $textbox->{act_able}=0;
     $textbox->set_border();
     $window->abs_move_curs(new_y=>1); #hmm...
     $window->put($textbox);
     $window->{parent}=$this;
     for ( my $i=0; $i < @{$params{buttons}}; $i++ ) {
-        my $temp = Paw::Paw_button->new( text=>$params{buttons}->[$i] );
+        my $temp = Paw::Button->new( text=>$params{buttons}->[$i] );
         push(@buttons, $temp);
         $temp->set_border();
         $window->put($temp);

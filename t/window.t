@@ -1,15 +1,15 @@
 print "1..6\n";
-use Paw_base;
-use Paw::Paw_window;
-use Paw::Paw_label;
+use Paw;
+use Paw::Window;
+use Paw::Label;
 print "ok 1\n";
-$widget = Paw::Paw_window->new(abs_x=>1, abs_y=>1, height=>30, width=>20, color=>1, statusbar=>1);
+$widget = Paw::Window->new(abs_x=>1, abs_y=>1, height=>30, width=>20, color=>1, statusbar=>1);
 print "ok 2\n";    
 
 $widget->set_border();
 print "ok 3\n";
 
-$test_widget = Paw::Paw_label->new(text=>" ");
+$test_widget = Paw::Label->new(text=>" ");
 $widget->put($test_widget);
 print "ok 4\n";
 

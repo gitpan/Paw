@@ -3,18 +3,18 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_scrollbar;
+package Paw::Scrollbar;
 use Curses;
 
-@ISA = qw(Exporter Paw_base);
+@ISA = qw(Exporter Paw);
 @EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 =head1 Scrollbar
 
-B<$sb=Paw::Paw_scrollbar->new($widget, [$name]);  #a little bit buggy>
+B<$sb=Paw::Scrollbar->new($widget, [$name]);  #a little bit buggy>
 
 B<Parameter>
 
@@ -25,13 +25,13 @@ B<Parameter>
 
 B<Example>
 
-     $sb=Paw::Paw_scrollbar->new(widget=>$listbox, name=>"List Scrollbar");
+     $sb=Paw::Scrollbar->new(widget=>$listbox, name=>"List Scrollbar");
 
 =cut
 
 sub new {
     my $class  = shift;
-    my $this   = Paw_base->new_widget_base;
+    my $this   = Paw->new_widget_base;
     my %params = @_;
 
     $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."scrollbar");    #Name des Fensters (nicht Titel)

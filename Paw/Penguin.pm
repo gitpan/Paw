@@ -3,19 +3,19 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
-package Paw::Paw_penguin;
+package Paw::Penguin;
 use Curses;
 
 @Paw::ISA = qw(Exporter);
-@ISA = qw(Paw_base);
+@ISA = qw(Paw);
 @Paw::EXPORT = qw(
 );
-$Paw::VERSION = "0.46";
+$Paw::VERSION = "0.47";
 
 
 sub new {
     my $classs = shift;
-    my $this   = Paw_base::new_widget_base;
+    my $this   = Paw::new_widget_base;
     my %params = @_;
 
     $this->{name}      = (defined $params{name})?($params{name}):("tux");    #Name des Fensters (nicht Titel)

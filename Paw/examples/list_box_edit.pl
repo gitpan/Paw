@@ -5,33 +5,33 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 use Curses;
-use Paw_base;
-use Paw::Paw_button;
-use Paw::Paw_text_entry;
-use Paw::Paw_listbox;
-use Paw::Paw_window;
-use Paw::Paw_scrollbar;
+use Paw;
+use Paw::Button;
+use Paw::Text_entry;
+use Paw::Listbox;
+use Paw::Window;
+use Paw::Scrollbar;
 
 
-($columns, $rows)=Paw_base::init_widgetset;
+($columns, $rows)=Paw::init_widgetset;
 
 @statusbar=("", "", "", "", "", "", "", "", "", "10=Quit");
-$win = Paw::Paw_window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>\@statusbar, orientation=>"grow");
+$win = Paw::Window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns, statusbar=>\@statusbar, orientation=>"grow");
 
 init_pair(2, COLOR_BLACK, COLOR_BLUE);
 # generate buttons with labels and border
-my $add_b = Paw::Paw_button->new(text=>"Add", callback=>(\&add_butt) );
+my $add_b = Paw::Button->new(text=>"Add", callback=>(\&add_butt) );
 $add_b->set_border("shade");
 
-my $del_b = Paw::Paw_button->new(text=>"Delete", callback=>(\&del_butt) );
+my $del_b = Paw::Button->new(text=>"Delete", callback=>(\&del_butt) );
 $del_b->set_border("shade");
 
-$edit = Paw::Paw_text_entry->new(width=>19, echo=>2, text=>"test");
+$edit = Paw::Text_entry->new(width=>19, echo=>2, text=>"test");
 $edit->set_border("shade");
 
 # generate a listbox with border - self explaining.
-$box  = Paw::Paw_listbox->new(width=>19, height=>$rows-13, colored=>1);
-$sb   = Paw::Paw_scrollbar->new(widget=>$box);
+$box  = Paw::Listbox->new(width=>19, height=>$rows-13, colored=>1);
+$sb   = Paw::Scrollbar->new(widget=>$box);
 
 #
 # Fill the box with 500 lines of data.

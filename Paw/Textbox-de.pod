@@ -1,0 +1,29 @@
+=head1 Textbox
+
+B<$popup=Paw::Textbox::new($height, $width, \@data, [$name]);>
+
+B<Parameter>
+
+     $height => Anzahl der Reihen
+
+     $width  => Anzahl der Spalten
+
+     \@data  => Referenz auf den Text. Jedes Arrayelement entspricht
+                einem Absatz
+
+B<Beispiel>
+
+     @data=("This is free software with ABSOLUTELY NO WARRANTY.",
+            "Copyright (C) 1999 Free Software Foundation, Inc.");
+     $pu=Paw::Paw_textbox->new(height=>20, width=>20, data=>\@data);
+
+=head2 set_border([``shade''])
+
+aktiviert den Rahmen der Box. Optional auch mit Schatten. 
+
+B<Beispiel>
+
+     $box->set_border("shade"); or $win->set_border();
+
+=cut
+
