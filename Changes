@@ -1,3 +1,10 @@
+0.41 - 0.45
++ cool examples added ;-)
++ abs_move_widget added
++ get_widget_pos added
++ test's added
++ set_color added
+
 0.4 - 0.41
 + Bug in documentation fixed (no title for boxes but for windows)
 + Crash on Power PC at "make test" fixed

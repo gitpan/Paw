@@ -13,6 +13,8 @@ Paw/examples/list_box_edit.pl
 Paw/examples/menu.pl
 Paw/examples/popup.pl
 Paw/examples/text_box.pl
+Paw/examples/scroller.pl
+Paw/examples/demo.pl
 Paw/Paw_box.pm
 Paw/Paw_button.pm
 Paw/Paw_container.pm

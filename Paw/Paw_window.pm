@@ -11,7 +11,7 @@ use Paw::Paw_statusbar;
 
 @ISA = qw(Paw_base Paw::Paw_container Exporter );
 @EXPORT = qw();
-$Paw::VERSION = "0.41";
+$Paw::VERSION = "0.45";
 
 
 =head1 Window

@@ -10,7 +10,7 @@ use Curses;
 @ISA = qw(Paw_base);
 @EXPORT = qw(&new
 );
-$Paw::VERSION = "0.41";
+$Paw::VERSION = "0.45";
 
 
 =head1 Listbox
@@ -89,6 +89,23 @@ returns an array with the complete contents of the listbox.
 B<Example>
 
      @full_data=$listbox->get_all_rows();
+
+=head2 abs_move_widget($new_x, $new_y)
+
+the widget moves to the new absolute screen position.
+if you set only one of the two parameters, the other one keeps the old value.
+
+B<Example>
+
+     $listbox->abs_move_widget( new_x=>5 );      #y-pos is the same
+
+=head2 get_widget_pos()
+
+returns an array of two values, the x-position and the y-position of the widget.
+
+B<Example>
+
+     ($xpos,$ypos)=$listbox->get_widget_pos();      #y-pos is the same
 
 =cut
 

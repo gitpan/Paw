@@ -8,7 +8,7 @@ use Carp;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(new_widget_base);
-$Paw::VERSION = "0.41";
+$Paw::VERSION = "0.45";
 
 package Paw_base;
 use Curses;
@@ -230,6 +230,29 @@ sub unset_border {
     my $this = shift;
 
     $this->{border} = 0;
+}
+
+sub abs_move_widget {
+    my $this   = shift;
+    my %params = @_;
+    my $new_x  = (defined $params{new_x}) ? ($params{new_x}):($this->{wx});
+    my $new_y  = (defined $params{new_y}) ? ($params{new_y}):($this->{wy});
+
+    $this->{wy}=$new_y;
+    $this->{wx}=$new_x;
+}
+
+sub get_widget_pos {
+    my $this = shift;
+
+    return ( $this->{wx}, $this->{wy} );
+}
+
+sub set_color {
+    my $this = shift;
+
+    $this->{color_pair} = $_[0];
+    return;
 }
 
 #

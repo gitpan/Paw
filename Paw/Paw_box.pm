@@ -67,7 +67,7 @@ B<Examplel>
 
 Sets the packer relative to the current position in the box (also negative values are possible). 
 
-B<Beispiel>
+B<Example>
 
      $box->rel_move_curs(new_y=>3, new_x=>-2);
 
@@ -222,6 +222,6 @@ sub key_press {
 
 @ISA = qw(Exporter Paw_base Paw::Paw_container);
 @EXPORT = qw();
-$Paw::VERSION = "0.41";
+$Paw::VERSION = "0.45";
 
 return 1;

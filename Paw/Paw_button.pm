@@ -61,9 +61,34 @@ B<Example>
 
 the button changes it status.
 
-B<Beispiel>
+B<Example>
 
      $button->push_button();      # [x]->[ ], [ ]->[x]
+
+=head2 abs_move_widget($new_x, $new_y)
+
+the widget moves to the new absolute screen position.
+if you set only one of the two parameters, the other one keeps the old value.
+
+B<Example>
+
+     $button->abs_move_widget( new_x=>5 );      #y-pos is the same
+
+=head2 get_widget_pos()
+
+returns an array of two values, the x-position and the y-position of the widget.
+
+B<Example>
+
+     ($xpos,$ypos)=$button->get_widget_pos();      #y-pos is the same
+
+=head2 set_color($color_pair)
+
+Set a new color_pair for the widget.
+
+B<Example>
+
+     $button->set_color(3);
 
 =cut
 
@@ -158,6 +183,6 @@ sub key_press {
 
 @ISA = qw(Exporter Paw_base);
 @EXPORT = qw();
-$Paw::VERSION = "0.41";
+$Paw::VERSION = "0.45";
 
 return 1;
