@@ -5,11 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Label;
 use Curses;
+use strict;
 
-@ISA = qw(Exporter);
-@ISA=qw(Paw);
-@EXPORT = qw();
-$Paw::VERSION = "0.47";
+@Paw::Label::ISA=qw(Paw);
+$Paw::VERSION = "0.50";
 
 =head1 Label Widget
 
@@ -85,11 +84,11 @@ sub new {
     my $this   = Paw->new_widget_base;
     my %params = @_;
     
-    $this->{name} = (defined $params{name})?($params{name}):("_auto_"."label");    #Name des Fensters (nicht Titel)
-    $this->{text} = $params{text};;
+    $this->{name} = (defined $params{name})?($params{name}):('_auto_label');   #Name des Fensters (nicht Titel)
+    $this->{text} = $params{text};
     $this->{rows} = 1;
-    $this->{direction} = "h";
-    $this->{type} = "label";
+    $this->{direction} = 'h';
+    $this->{type} = 'label';
     $this->{color_pair} = (defined $params{color})?($params{color}):(0);
     
     bless ($this, $class);
@@ -102,23 +101,15 @@ sub draw {
     $this->{color_pair} = $this->{parent}->{color_pair} if ( not defined $this->{color_pair} );
 
     $this->{cols}=length $this->{text};
-    attron(COLOR_PAIR( $this->{color_pair} ) );
+    attron( COLOR_PAIR($this->{color_pair}) );
     addstr($this->{text});
 }
 
 sub set_text {
     my $this = shift;
-    my @box  = ();
-    my $old  = $this->{text};
-    $this->{text} = $_[0];
+    $this->{text} = shift;
 
-    #    if ( length $this->{text} < length $old ) {
-    #    $this->{text} = $_[0] . (" "x(length $old-length $this->{text}));
-    #    $this->{parent}->_refresh($this);
-    #}
-    #else {
     $this->{parent}->_refresh($this);
-    #}
     $this->{cols} = length $this->{text};
 }
 

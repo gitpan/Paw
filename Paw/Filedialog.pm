@@ -5,6 +5,7 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Filedialog;
 use Curses;
+use strict;
 require Paw::Window;
 require Paw::Listbox;
 require Paw::Button;
@@ -13,10 +14,8 @@ require Paw::Text_entry;
 require Paw::Line;
 require Paw::Scrollbar;
 
-@ISA = qw(Paw Exporter);
-@EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Filedialog::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 =head1 Filedialog
@@ -83,41 +82,50 @@ sub new {
     my %params = @_;
     my $cb     = \&_callback;
     
-    $this->{dir}  = (defined $params{dir})?($params{dir}):(".");
-    $this->{name} = (defined $params{name})?($params{name}):("_auto_"."filedialog");    #Name des Fensters (nicht Titel)
+    $this->{dir}  = (defined $params{dir})?($params{dir}):('.');
+    $this->{name} = (defined $params{name})?($params{name}):('_auto_filedialog');
     $this->{rows} = (defined $params{height})?($params{height}):($this->{screen_rows}-10);
     $this->{cols} = (defined $params{width})?($params{width}):(30);
-    $this->{type} = "filedialog";
+    $this->{type} = 'filedialog';
 
-    my $window = Paw::Window->new( abs_x=>($this->{screen_cols}-$this->{cols})/2, abs_y=>($this->{screen_rows}-$this->{rows})/2, callback=>$cb, height=>$this->{rows}, width=>$this->{cols}, orientation=>"grow" );
+    my $window = Paw::Window->new( abs_x    => ($this->{screen_cols}-$this->{cols})/2, 
+				   abs_y    => ($this->{screen_rows}-$this->{rows})/2, 
+				   callback => $cb, 
+				   height   => $this->{rows}, width=>$this->{cols}, 
+				   orientation => 'grow' );
     $window->{parent} = $this;
-    $window->set_border("shade");
+    $window->set_border('shade');
     my $label=Paw::Label->new(text=>"Path: ");
-    my $entry=Paw::Text_entry->new(name=>"__fd_entry", text=>$this->{dir}, width=>22, echo=>2);
+    my $entry=Paw::Text_entry->new(
+				   name=>'__fd_entry', 
+				   text=>$this->{dir}, width=>22, echo=>2,
+				   callback => \&_entry_cb
+				  );
     my $line=Paw::Line->new(char=>ACS_HLINE, length=>$this->{cols});
-    my $list=Paw::Listbox->new(name=>"__fd_listbox", width=>28, height=>$this->{rows}-7,colored=>1);
+    my $list=Paw::Listbox->new(name=>'__fd_listbox', 
+			       width=>28, height=>$this->{rows}-7,colored=>1);
     $list->set_border();
-    my $ok=Paw::Button->new(text=>"Ok");
-    $ok->set_border("shade");
-    my $cancel=Paw::Button->new(text=>"Cancel");
-    $cancel->set_border("shade");
+    my $ok=Paw::Button->new(text=>'Ok');
+    $ok->set_border('shade');
+    my $cancel=Paw::Button->new(text=>'Cancel');
+    $cancel->set_border('shade');
     my $sb=Paw::Scrollbar->new(widget=>$list);
 
-    $window->put_dir("h");
+    $window->put_dir('h');
     $window->abs_move_curs(new_x=>1,new_y=>0);
     $window->put($label);
     $window->put($entry);
-    $window->put_dir("v");
+    $window->put_dir('v');
     $window->put($line);
-    $window->put_dir("v");
+    $window->put_dir('v');
     $window->put($list);
-    $window->put_dir("h");
+    $window->put_dir('h');
     $window->put($sb);
-    $window->put_dir("v");
+    $window->put_dir('v');
     $window->rel_move_curs(new_y=>3);
     $window->put($ok);
     $window->rel_move_curs(new_x=>$this->{cols}-17);
-    $window->put_dir("h");
+    $window->put_dir('h');
     $window->put($cancel);
 
     $this->{window}  = $window;
@@ -132,10 +140,23 @@ sub new {
 
 sub draw {
     my $this = shift;
-    $this->{color_pair} = $this->{parent}->{color_pair};
-    $this->{window}->set_focus("__fd_listbox");
+
+    $this->{'window'}->set_focus('__fd_listbox');
     
     return $this->{window}->raise();
+}
+
+sub _entry_cb {
+    my $this = shift;
+    my $key  = shift;
+    
+    return '' if not defined $key;
+    if ( $key eq KEY_DOWN or $key eq KEY_UP or 
+	 $key eq "\n" or $key eq "\t" ) {
+	$this->{parent}->{parent}->set_dir( $this->get_text() );
+	$this->{parent}->{parent}->{ok}->push_button();
+    }
+    return $key;
 }
 
 sub _callback {
@@ -143,11 +164,12 @@ sub _callback {
     my $d=0;
     my @dirs=();
     my @files=();
+    my $file;
     
     my $fg=0;
     my $bg=0;
     pair_content( $this->{color_pair}, $fg, $bg );
-    $fg=unpack("C",$fg);$bg=unpack("C",$bg);
+    $fg=unpack('C',$fg);$bg=unpack('C',$bg);
     init_pair($this->{anz_pairs}-3, COLOR_CYAN, $bg);
     $this->{parent}->{ok}->release_button();
     $this->{parent}->{cancel}->release_button();
@@ -163,25 +185,26 @@ sub _callback {
 
     closedir(DIR);
 
-    my $key = "";
+    my $key = '';
     while ( 1 ) {
         $this->_refresh() if ( $key ne -1 );
         $key = getch();
         $this->key_press($key) if ( $key ne -1 );
         return 0 if ($this->{parent}->{cancel}->is_pressed() );
         if ($this->{parent}->{ok}->is_pressed()) {
-            my @dummy = $this->{parent}->{list}->get_pushed_rows("data");
-            $dummy[0] = "" if not defined $dummy[0];
-            $dummy[0] = ".." if ( @dirs == 0 );
-            if ($dummy[0] eq "..") {
+            my @dummy = $this->{parent}->{list}->get_pushed_rows('data');
+            $dummy[0] = '' if not defined $dummy[0];
+            $dummy[0] = '..' if ( @dirs == 0 );
+            if ($dummy[0] eq '..') {
                 $this->{parent}->{dir} =~ s/(.*\/)(.*\/$)/$1/;
                 $this->{parent}->set_dir($this->{parent}->{dir});
                 $file=$this->{parent}->{dir};
             }
             else {
-                $file=($this->{parent}->{dir}.$dummy[0]."/");
+		$file = $this->{parent}->{dir};
+                $file .= $dummy[0].'/' if $dummy[0];       # no $dummy[0] when coming from text_ent
             }
-            if (-d $file and $this->{active}->{type} eq "listbox") {
+            if (-d $file and $this->{active}->{type} eq 'listbox') {
                 @dirs=();
                 @files=();
                 $this->{parent}->{ok}->release_button();
@@ -199,9 +222,9 @@ sub _callback {
                 $this->_refresh();
             }
             else {
-                return $this->{parent}->{list}->get_pushed_rows("data");
+                return $this->{parent}->{list}->get_pushed_rows('data');
             }
-        };
+        }
     }
 }
 
@@ -210,8 +233,8 @@ sub set_dir {
     my $this = shift;
     my $path = shift;
     
-    return if $path =~ /\/\.\/$/;
-    $path=$path."/" if ( not ($path =~ /\/$/i) ); #evtl, Slash anhaengen
+    return if $path =~ /\/\.\/$/;                 # set_dir('./')
+    $path .= '/' if ( not ($path =~ /\/$/i) );    #evtl, Slash anhaengen
     $this->{dir} = $path;
     $this->{entry}->set_text($path);
 }

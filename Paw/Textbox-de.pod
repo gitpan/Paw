@@ -1,6 +1,6 @@
 =head1 Textbox
 
-B<$popup=Paw::Textbox::new($height, $width, \@data, [$name]);>
+B<$popup=Paw::Textbox::new($height, $width, \$text, [$name], [$edit] );>
 
 B<Parameter>
 
@@ -8,14 +8,16 @@ B<Parameter>
 
      $width  => Anzahl der Spalten
 
-     \@data  => Referenz auf den Text. Jedes Arrayelement entspricht
-                einem Absatz
+     \$text  => Referenz auf den Text. 
+
+     $edit   => editierbarer Text ? 
+                (0=nein, 1=ja). Standard ist 0
+                
 
 B<Beispiel>
 
-     @data=("This is free software with ABSOLUTELY NO WARRANTY.",
-            "Copyright (C) 1999 Free Software Foundation, Inc.");
-     $pu=Paw::Paw_textbox->new(height=>20, width=>20, data=>\@data);
+     $data=("This is free software with ABSOLUTELY NO WARRANTY.\n")
+     $pu=Paw::Paw_textbox->new(height=>20, width=>20, text=>\$data);
 
 =head2 set_border([``shade''])
 

@@ -28,7 +28,7 @@ perldoc Paw::Filedialog
 perldoc Paw::Popup
 perldoc Paw::Menu
 perldoc Paw::Text_entry
-
+perldoc Paw::Progressbar
 
 Please provide feedback - good or bad. (Bad I will try to fix, good makes
 me feel it was a worthwhile effort.)

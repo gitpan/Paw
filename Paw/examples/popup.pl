@@ -4,6 +4,8 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
+#
+# see also perldoc Paw::Popup
 use Paw; # needed for widgets
 use Curses; # needed for getch() and more
 use Paw::Popup;
@@ -47,8 +49,8 @@ $label = Paw::Label->new(text=>"Enter Popup-Dialog");
 # third line  : the dialog box with a fixed height and width
 #
 @buttons = ( "Ok", "Cancel", "don't know" );
-@text = ("Dieses ist ein Popup-Dialog mit einer variablen Zahl Buttons.","Blablabla.");
-$pop = Paw::Popup->new( width=>35, height=>10, buttons=>\@buttons, text=>\@text );
+$text = ("This is a Popup-Dialog with some buttons.\nNow go ! Leave me alone.");
+$pop = Paw::Popup->new( shade=>1, buttons=>\@buttons, text=>\$text );
 
 $win->abs_move_curs(new_y=>1); #Bug =:-(
 

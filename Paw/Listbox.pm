@@ -5,12 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Listbox;
 use Curses;
+use strict;
 
-@ISA = qw(Exporter);
-@ISA = qw(Paw);
-@EXPORT = qw(&new
-);
-$Paw::VERSION = "0.47";
+@Paw::Listbox::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 =head1 Listbox
@@ -124,15 +122,15 @@ sub new {
     my @label  = ();
     my @pushed = ();
     my @colors = ();
-    $this->{name}         = (defined $params{name})?($params{name}):("_auto_"."listbox");    #Name des Fensters (nicht Titel)
+    $this->{name}         = (defined $params{name})?($params{name}):('_auto_listbox');    #Name des Fensters (nicht Titel)
     $this->{act_able}     = 1;
     $this->{cols}         = $params{width};
     $this->{rows}         = $params{height};
     $this->{colored}      = (defined $params{colored})?($params{colored}):(0);
     $this->{data}         = \@label;
     $this->{colors}       = \@colors;
-    $this->{direction}    = "v";
-    $this->{type}         = "listbox";
+    $this->{direction}    = 'v';
+    $this->{type}         = 'listbox';
     $this->{pushed}       = \@pushed;
     $this->{view_start_y} = 0;
     $this->{active_row}   = 0;
@@ -147,9 +145,9 @@ sub new {
 sub clear_listbox {
     my $this = shift;
 
-    $this->{data}=();
-    $this->{colors}=();
-    $this->{pushed}=();
+    $this->{data}=[];
+    $this->{colors}=[];
+    $this->{pushed}=[];
     $this->{active_row} = 0;
     $this->{used_rows} = 0;
     $this->{view_start_y} = 0;
@@ -160,7 +158,7 @@ sub add_row {
     my $data = $_[0];
     my $color= (defined $_[-1])?($_[-1]):(0);
 
-    if ( ref($data) eq "ARRAY" ) {
+    if ( ref($data) eq 'ARRAY' ) {
         for ( my $i=0; $i<@{$data}; $i++ ) {
             push (@{$this->{data}},$$data[$i]);
             push (@{$this->{colors}}, $color);
@@ -178,27 +176,30 @@ sub add_row {
 
 sub del_row {
     my $this = shift;
-    my $under= $_[0]-1;
-    my $over = $_[0]+1;
+    my $pos  = shift;
+    my $under= $pos-1;
+    my $over = $pos+1;
     my $end  = $this->{used_rows}-1;
 
-    $this->{pushed}->[$_[0]]=0;
+    $this->{pushed}->[$pos]=0;
     @{$this->{data}}=(@{$this->{data}}[0 .. $under], @{$this->{data}}[$over .. $end]);
     @{$this->{pushed}}=(@{$this->{pushed}}[0 .. $under], @{$this->{pushed}}[$over .. $end]);
     
     $this->{used_rows}--;
-    $this->{active_row}-- if ( $_[0] <= $this->{active_row} );
+    $this->{active_row}-- if ( $pos <= $this->{active_row} );
     #$this->{parent}->_refresh();
     return;
 }
 
 sub change_rows {
     my $this = shift;
+    my $pos_a = shift;
+    my $pos_b = shift;
 
-    @{$this->{data}}->[$_[0]] = $_[1];
-    my $dummy=$this->{pushed}->[$_[0]];
-    $this->{pushed}->[$_[0]]=$this->{pushed}->[$_[1]];
-    $this->{pushed}->[$_[1]]=$dummy;
+    @{$this->{data}}->[$pos_a] = $pos_b;
+    my $dummy=$this->{pushed}->[$pos_a];
+    $this->{pushed}->[$pos_a]=$this->{pushed}->[$pos_b];
+    $this->{pushed}->[$pos_b]=$dummy;
     #    $this->{parent}->_refresh();
 }
 
@@ -210,14 +211,15 @@ sub number_of_data {
 
 sub get_pushed_rows {
     my $this = shift;
+    my $what = shift;
     my @ret  = ();
     my @data = @{$this->{data}};
     
     for ( my $i=0; $i < $this->{used_rows}; $i++) {
-        if ( $_[0] eq "data" ) {
+        if ( $what eq 'data' ) {
             push (@ret,$data[$i]) if ( $this->{pushed}->[$i] );
         }
-        elsif ( $_[0] eq "linenumbers" ) {
+        elsif ( $what eq 'linenumbers' ) {
             push (@ret,$i) if ( $this->{pushed}->[$i] );
         }
     }
@@ -225,7 +227,7 @@ sub get_pushed_rows {
 }
 
 sub get_all_rows {
-    $this = shift;
+    my $this = shift;
 
     return @{$this->{data}};
 }
@@ -238,13 +240,13 @@ sub draw {
     $this->{view_end} = ($this->{view_start_y}+$this->{rows});
 
     my $string = @{$this->{data}}[$i+$this->{view_start_y}];
-    $string = "" if not defined $string;
+    $string = '' if not defined $string;
     $string = substr($string, 0, $this->{cols}) if ( defined $string );
     attron(A_BOLD) if ($this->{pushed}->[$i+$this->{view_start_y}]);
     if ( $this->{is_act} and $i+$this->{view_start_y} == $this->{active_row} ) {
         attron(A_REVERSE);
     }
-    $string.= " " x ($this->{cols} - length($string));
+    $string.= ' ' x ($this->{cols} - length($string));
     my $pair=($this->{colored})?($this->{colors}->[$i+$this->{view_start_y}]):($this->{color_pair});
     attron(COLOR_PAIR($pair)) if defined $pair;
     addstr($string);
@@ -258,14 +260,14 @@ sub key_press {
     my $key  = shift;
     my $active_row = $this->{active_row};
 
-    $key = "" if not defined $key;
+    $key = '' if not defined $key;
     if ( $key eq KEY_DOWN and ($active_row < $this->{used_rows}-1) ) {
         $this->{active_row}++;
         if ( $this->{view_end} < $active_row+2 ) {
             $this->{view_start_y}++;
             $this->{view_end} = $this->{view_start_y}+$this->{rows};
         }
-        $key = "";
+        $key = '';
     }
     elsif ( $key eq KEY_UP and ($active_row > 0)) {
         if ( $this->{active_row} > 0 ) {
@@ -275,18 +277,19 @@ sub key_press {
                 $this->{view_end} = $this->{view_start_y}+$this->{rows};
             }
         }
-        $key = "";
+        $key = '';
     }
-    elsif ( ($key eq " " or $key eq "\n") ) {
+    elsif ( ($key eq ' ' or $key eq "\n") ) {
         $this->{pushed}->[$active_row] = ~$this->{pushed}->[$active_row];
         $this->key_press(KEY_DOWN);
-        if ( defined $this->{parent}->{parent}->{type} and
-             $this->{parent}->{parent}->{type} eq "filedialog" and
+        if ( $this->{parent}->{parent} and
+	     $this->{parent}->{parent}->{type} and
+             $this->{parent}->{parent}->{type} eq 'filedialog' and
              $key eq "\n" )
         {
             $this->{parent}->{parent}->{ok}->push_button();
         }
-        $key = "";
+        $key = '';
     }
     elsif ( $key eq KEY_NPAGE ) {
         for ( my $i=0; $i<$this->{rows}; $i++ ) {
@@ -299,7 +302,7 @@ sub key_press {
         }
     }
     elsif ( $key eq KEY_DOWN or $key eq KEY_UP ) {
-        $key = "";
+        $key = '';
     }
     return $key;
 }

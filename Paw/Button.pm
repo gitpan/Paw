@@ -6,7 +6,9 @@
 
 package Paw::Button;
 use Curses;
-
+use strict;
+@Paw::Button::ISA = qw(Exporter Paw);
+$Paw::VERSION = "0.50";
 
 =head1 Button Widget
 
@@ -105,25 +107,25 @@ sub new {
     my %params = @_;
     my $this = Paw->new_widget_base;
 
-    $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."button");    #Name des Fensters (nicht Titel)
+    $this->{name}      = (defined $params{name})?($params{name}):('_auto_button');    #Name des Fensters (nicht Titel)
     $this->{label}     = $params{text};
     $this->{callback}  = $params{callback};
-    $this->{text}      = "[ ]";
+    $this->{text}      = '[ ]';
     $this->{rows}      = 1;
-    $this->{direction} = "h";
-    $this->{type}      = "button";
-    $this->{in_butt}   = " ";
+    $this->{direction} = 'h';
+    $this->{type}      = 'button';
+    $this->{in_butt}   = ' ';
     $this->{act_able}  = 1;
     $this->{is_act}    = 0;
     $this->{is_pressed}= 0;
     $this->{rows}      = 1;
-    $this->{direction} = "h";
+    $this->{direction} = 'h';
     $this->{color_pair} = (defined $params{color})?($params{color}):(0);
     
-    $this->{label} = "" if ( not $this->{label} );
+    $this->{label} = '' if ( not $this->{label} );
     
     bless ($this, $class);
-    $this->{cols}      = ( $this->{label} eq "" )?(3):(length ($this->{label})+2);
+    $this->{cols}      = ( $this->{label} eq '' )?(3):(length ($this->{label})+2);
     
     return $this;
 }
@@ -134,7 +136,7 @@ sub draw {
 
     $this->{text}=(not $this->{label})?("[$this->{in_butt}]"):("[$this->{label}]");
     attron(COLOR_PAIR($this->{color_pair}));
-    attron(A_REVERSE) if ( $this->{is_act} );
+    attron(A_REVERSE) if $this->{is_act} ;
     addstr($this->{text});
 }
 
@@ -143,7 +145,7 @@ sub push_button {
     my $text     = $this->{text};
     my $callback = $this->{callback};
     
-    $this->{in_butt}=($this->{in_butt} eq " ")?("x"):(" ");
+    $this->{in_butt}=($this->{in_butt} eq ' ')?('x'):(' ');
     $this->{is_pressed} = ~$this->{is_pressed};
 
     if ( $this->{callback} ) {
@@ -157,7 +159,7 @@ sub set_button {
     my $text     = $this->{text};
     my $callback = $this->{callback};
     
-    $this->{in_butt}="x" if ( not $this->{label} );
+    $this->{in_butt}='x' if ( not $this->{label} );
     $this->{is_pressed}=1;
     &$callback($this) if ( $this->{callback} );
 }
@@ -167,7 +169,7 @@ sub release_button {
     my $text     = $this->{text};
     my $callback = $this->{callback};
     
-    $this->{in_butt}=" " if ( not $this->{label} );
+    $this->{in_butt}=' ' if ( not $this->{label} );
     $this->{is_pressed}=0;
 }
 
@@ -182,15 +184,11 @@ sub key_press {
     my $this = shift;
     my $key  = shift;
 
-    if ( $key eq " " or $key eq "\n" ) {
+    if ( $key eq ' ' or $key eq "\n" ) {
         $this->push_button();
-        return "";
+        return '';
     }
     return $key;
 }
-
-@ISA = qw(Exporter Paw);
-@EXPORT = qw();
-$Paw::VERSION = "0.47";
 
 return 1;

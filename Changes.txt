@@ -1,3 +1,11 @@
+0.47 - 0.50
++ code cleanup 
++ progressbar widget+example added
++ filedialog Text_entry fixed
++ Text_entry callback fixed
++ Textbox completely rewritten 
+  (ideas from Arthur Corliss Curses::Widgets Code, thanx)
+
 0.46 - 0.47
 + German Documentation added
 + Documentation updated

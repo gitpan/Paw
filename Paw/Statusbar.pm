@@ -6,17 +6,15 @@
 package Paw::Statusbar;
 use Curses;
 
-@ISA = qw(Exporter Paw);
-@EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Statusbar::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 sub new {
     my $class  = shift;
     my $this   = Paw->new_widget_base;
     my %params = @_;
 
-    $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."statusbar");    #Name des Fensters (nicht Titel)
+    $this->{name}      = (defined $params{name})?($params{name}):('_auto_statusbar');    #Name des Fensters (nicht Titel)
     $this->{func_keys} = $params{func_keys};
     $this->{color_pair}= $this->{anz_pairs}-2;
     $this->{cols}      = 73;
@@ -33,15 +31,15 @@ sub draw {
     $this->{wy} = $this->{parent}->{rows}-1;
     $this->{wy} = $this->{parent}->{rows} if ($this->{parent}->{parent}->{box_border}); #ungly
     $this->{wx} = ($this->{parent}->{cols}-72)/2+3;
-    if ( ref($sb) eq "ARRAY" ) {
+    if ( ref($sb) eq 'ARRAY' ) {
         for ( my $i=1; $i<11; $i++ ) {
             my $dummy = substr($this->{func_keys}->[$i-1],0,7);
-            $dummy .= (" " x (7-length($dummy)));
+            $dummy .= (' ' x (7-length($dummy)));
             $sl .= $dummy;
         }
     }
     else {
-        $sl=$$sb.(" " x (72-length $$sb));;
+        $sl=$$sb.(' ' x (72-length $$sb));;
     }
     attron(COLOR_PAIR($this->{color_pair}));
     addstr($sl) if ( $this->{parent}->{cols} > 72 );

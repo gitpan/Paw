@@ -5,10 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Line;
 use Curses;
+use strict;
 
-@ISA = qw(Exporter Paw);
-@EXPORT = qw();
-$Paw::VERSION = "0.47";
+@Paw::Line::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 =head1 Line Widget
 
@@ -69,17 +69,17 @@ sub new {
     my $this   = Paw->new_widget_base;
     my %params = @_;
 
-    $this->{name}        = (defined $params{name})?($params{name}):("_auto_"."line");    #Name des Fensters (nicht Titel)
+    $this->{name}        = (defined $params{name})?($params{name}):('_auto_line');    #Name des Fensters (nicht Titel)
     $this->{cols}        = 1;
     $this->{rows}        = 1;
     $this->{char}        = (defined $params{char})?($params{char}):(ACS_HLINE);
     $this->{size}        = $params{length};
-    $this->{direction}   = (defined $params{direction})?($params{direction}):("h");
-    $this->{type}        = "line";
-    $this->{print_style} = "char";
+    $this->{direction}   = (defined $params{direction})?($params{direction}):('h');
+    $this->{type}        = 'line';
+    $this->{print_style} = 'char';
     
     bless ($this, $class);
-    ( $this->{direction} eq "v" ) ? ($this->{rows}=$this->{size}):($this->{cols}=$this->{size});
+    ( $this->{direction} eq 'v' ) ? ($this->{rows}=$this->{size}):($this->{cols}=$this->{size});
     return $this;
 }
 
@@ -89,7 +89,7 @@ sub draw {
     $this->{color_pair} = $this->{parent}->{color_pair} if ( not defined $this->{color_pair} );
     attron(COLOR_PAIR($this->{color_pair}));
     
-    if ( $this->{direction} eq "h" ) {
+    if ( $this->{direction} eq 'h' ) {
         for ( my $i=0; $i<$this->{size}; $i++ ) {
             addch( $this->{char} );
         }

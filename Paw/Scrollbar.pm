@@ -5,11 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Scrollbar;
 use Curses;
+use strict;
 
-@ISA = qw(Exporter Paw);
-@EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Scrollbar::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 =head1 Scrollbar
@@ -34,15 +33,15 @@ sub new {
     my $this   = Paw->new_widget_base;
     my %params = @_;
 
-    $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."scrollbar");    #Name des Fensters (nicht Titel)
+    $this->{name}      = (defined $params{name})?($params{name}):('_auto_scrollbar');    #Name des Fensters (nicht Titel)
     $this->{widget}    = $params{widget};
-    $this->{direction} = "v";
-    $this->{type}      = "scrollbar";
-    if ( $this->{direction} eq "v" ) {
+    $this->{direction} = 'v';
+    $this->{type}      = 'scrollbar';
+    if ( $this->{direction} eq 'v' ) {
         $this->{cols} = 1;
         $this->{rows} = $this->{widget}->{rows};
     }
-    elsif ( $this->{direction} eq "h" ){
+    elsif ( $this->{direction} eq 'h' ){
         $this->{rows} = 1;
         $this->{cols} = $this->{widget}->{cols};
     }    
@@ -55,7 +54,7 @@ sub draw {
     my $line = $_[0];
     my @box  = ();
     
-    if ( $this->{direction} eq "v" ) {
+    if ( $this->{direction} eq 'v' ) {
         $this->{wx}   = $this->{widget}->{wx}+$this->{widget}->{cols}+1;
         $this->{wy}   = $this->{widget}->{wy};
     }
@@ -71,11 +70,11 @@ sub draw {
     my $piece=( (($full)/($this->{rows})) );
     for ( my $i=0; $i<$this->{rows}; $i++ ) {
         if ( $ar == int($piece*$i) ) {
-            $box[$this->{last_time}] = "|" if ( defined $this->{last_time} );
+            $box[$this->{last_time}] = '|' if ( defined $this->{last_time} );
             $this->{last_time}=$i;
         }
-        $box[$i]="|";
-        $box[$this->{last_time}] = "#";
+        $box[$i]='|';
+        $box[$this->{last_time}] = '#';
     }
     addch($box[$line]);
 }

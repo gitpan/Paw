@@ -5,11 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Radiobutton;
 use Curses;
+use strict;
 
-@ISA = qw(Exporter Paw);
-@EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Radiobutton::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 =head1 Radiobutton Widget
@@ -99,20 +98,20 @@ sub new {
     my %params = @_;
     my @label  = @{$params{labels}};
 
-    $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."radiobutton");    #Name des Fensters (nicht Titel)
-    $this->{direction} = (defined $params{direction})?($params{direction}):("v");
+    $this->{name}      = (defined $params{name})?($params{name}):('_auto_radiobutton');    #Name des Fensters (nicht Titel)
+    $this->{direction} = (defined $params{direction})?($params{direction}):('v');
     $this->{callback}  = $params{callback};
     $this->{act_able}  = 1;
     $this->{rows}      = 1;
     $this->{label}     = \@label;
-    $this->{type}      = "radiobutton";
+    $this->{type}      = 'radiobutton';
     $this->{act_elem}  = 0;
     $this->{view_start_y} = 0;
     $this->{active_row} = 0;
-    $this->{color_pair}= (defined $params{color})?($params{color}):($this->{parent}->{color_pair});
+    $this->{color_pair}= (defined $params{color})?($params{color}):(0);
     
     bless ($this, $class);
-    if ( $this->{direction} eq "h" ) {
+    if ( $this->{direction} eq 'h' ) {
         $this->{rows} = 1;
         for ( my $i=0; $i < @label; $i++ ) {
             $this->{cols}=$this->{cols}+(length $label[$i])+4;
@@ -139,17 +138,17 @@ sub draw {
     attron(COLOR_PAIR($this->{color_pair}));
     
     for ( my $i=0; $i < $anz; $i++ ) {
-        if ( $this->{direction} eq "v" ) {
+        if ( $this->{direction} eq 'v' ) {
             my $fill = ($this->{cols} - (length $arr[$i])-4);
             my $dummy;
-            $dummy = ($arr[$i] . (" " x $fill) . ( ($i==$this->{act_elem}) ? (" (x)"):(" ( )") ));
+            $dummy = ($arr[$i] . (' ' x $fill) . ( ($i==$this->{act_elem}) ? (' (x)'):(' ( )') ));
             if ( $this->{is_act} ) {
                 ($i==$this->{active_row})?(attron(A_REVERSE)):(attroff(A_REVERSE));
             }
             addstr($dummy) if ( $i == $line );
         }
         else {
-            my $dummy=$arr[$i] . ( ($i==$this->{act_elem}) ? (" (x)"):(" ( )") );
+            my $dummy=$arr[$i] . ( ($i==$this->{act_elem}) ? (' (x)'):(' ( )') );
             ($i==$this->{active_row})?(attron(A_REVERSE)):(attroff(A_REVERSE));
             addstr($dummy);
         }
@@ -178,17 +177,17 @@ sub key_press {
     my $key  = shift;
     my $anz  = @{$this->{label}};
 
-    if ( $key eq " " or $key eq "\n" ) {
+    if ( $key eq ' ' or $key eq "\n" ) {
         $this->set_button();
-        return "";
+        return '';
     }
     elsif ( $key eq KEY_UP ) {
         $this->{active_row} = $this->{active_row}-1 if ($this->{active_row} > 0);
-        return "";
+        return '';
     }
     elsif ( $key eq KEY_DOWN ) {
         $this->{active_row} = $this->{active_row}+1 if ($this->{active_row} < $anz-1);
-        return "";
+        return '';
     }
     return $key;
 }

@@ -6,9 +6,12 @@
 
 package Paw::Box;
 
-use Exporter ();
+use strict;
 use Curses;
 use Paw::Container;
+
+@Paw::Box::ISA = qw(Exporter Paw Paw::Container);
+$Paw::VERSION = "0.50";
 
 =head1 Box Widget
 
@@ -33,7 +36,7 @@ B<Parameter>
                      terminal side, it remains centered or it
                      grows/shrinks with the new terminal size
                      (default is the orientation of the parent-widget)
-                     [ optionally ]. 
+                     [ optionally ].'
 B<Example>
 
      $box=Paw::Box->new(direction=>"v",title=>"Start",color=>1);
@@ -58,7 +61,7 @@ B<Example>
 
 Sets the packer to the absolute position in the box (negative values lay outside of the box). 
 
-B<Examplel>
+B<Example>
 
      $box->abs_move_curs(new_x=>1);
 
@@ -82,8 +85,8 @@ sub new {
     my %act_group;
 
     $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."box");    #Name des Fensters (nicht Titel)
-    $this->{title}     = "";
-    $this->{type}      = "box";
+    $this->{title}     = '';
+    $this->{type}      = 'box';
     $this->{direction} = $params{direction};
     $this->{put_dir}   = $params{direction}; #sorry
     $this->{widgets}   = \@widgets;        #Array of all Widget Pointer
@@ -99,7 +102,7 @@ sub new {
     $this->{box_border} = 0;
     $this->{act_hash}   = \%act_group;
     $this->{group_hash} = \%group;
-    $this->{group}      = "_default";
+    $this->{group}      = '_default';
     $this->{set_boxes}  = 1;
     $this->{event_func} = \&Paw::_empty_callback;
     $this->{prev_wid}  = {rows=>0};
@@ -113,28 +116,27 @@ sub new {
     $this->{wy}        = 0;
     $this->{ax}        = 0;
     $this->{ay}        = 0;
-    $this->{group_hash}->{"_default"}=\@widgets;
-    $this->{act_hash}->{"_default"}=\@act_wid;
+    $this->{group_hash}->{'_default'}=\@widgets;
+    $this->{act_hash}->{'_default'}=\@act_wid;
 
     return $this;
 }
 
 sub set_box_pos {
     my $this = shift;
-    my $widget = 0;
-
     my $anz_wid = @{$this->{widgets}};
 
     for (my $i=0; $i < $anz_wid; $i++) {
-        $widget=@{$this->{widgets}}->[$i];
-        if ( $widget->{type} eq "box" ) {
+        my $widget=@{$this->{widgets}}->[$i];
+        if ( $widget->{type} eq 'box' ) {
             $widget->{ax}=$this->{ax}+$widget->{wx};
             $widget->{ay}=$this->{ay}+$widget->{wy};
-            $widget->set_box_pos();
+            $widget->set_box_pos();                 # deeper and deeper
         }
     }
     return;
 }
+
 sub next_active {
     my $this    = shift;
 
@@ -200,27 +202,23 @@ sub key_press {
     my $this = shift;
     my $key  = $_[0];
 
-    $key = "" if ( not defined $key );
+    $key = '' if ( not defined $key );
     if ( $this->{active}->{is_act} ) {
         $key=$this->{active}->key_press($key);
-        return "" if ( $key eq "" );
+        return '' if ( $key eq '' );
     }
     if ( $key eq "\t" or $key eq KEY_DOWN or $key eq KEY_RIGHT ) {
         $this->next_active();
-        $key = "";
+        $key = '';
     }
     # Key up aktiviert vorheriges Widget
     elsif ( $key eq KEY_UP or $key eq KEY_LEFT or (defined $this->{active}->{leaving} and $this->{active}->{leaving}==-1) ) {
         $this->prev_active();
-        $key = "";
+        $key = '';
     }
     $this->{active}->{is_act}=1;
     $this->_refresh();
     return $key;
 }
-
-@ISA = qw(Exporter Paw Paw::Container);
-@EXPORT = qw();
-$Paw::VERSION = "0.47";
 
 return 1;

@@ -33,10 +33,20 @@ B<Beispiel>
 
 B<Callback>
 
-Die Callback Funktion wird bei jedem Tastendruck angesprungen, dabei wird der
-Wert der gedrueckten Taste uebergeben und muss auch wieder zurueck gegeben werden,
-wenn er in das Textentry soll. So laesst sich eine Art Filter programmieren, der z.B.
-nur Ziffern zulaesst.
+Die Callback Funktion wird bei jedem Tastendruck angesprungen, dabei wird die 
+Objekt-Referenz ($this) sowie der Wert der gedrueckten Taste uebergeben. 
+Dieser muss auch wieder zurueck gegeben werden, wenn er in das Textentry soll. 
+So laesst sich eine Art Filter programmieren, der z.B. nur Ziffern zulaesst.
+
+sub callback {
+   my $this = shift;
+   my $key  = shift;
+
+   [... Programmcode ...]
+
+   return $key;
+}
+
 
 =head2 get_text()
 

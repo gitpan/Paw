@@ -4,6 +4,9 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
+#
+# see also perldoc Paw::Listbox
+
 use Curses;
 use Paw;
 use Paw::Button;

@@ -4,6 +4,9 @@
 #
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
+#
+# see also perldoc Paw::Filedialog
+
 use Paw;    # needed for widgets
 use Curses;      # needed for getch() and more
 use Paw::Button;

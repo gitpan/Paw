@@ -4,14 +4,14 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Window;
+use strict;
 use Curses;
 use Paw::Container;
 use Paw::Box;
 use Paw::Statusbar;
 
-@ISA = qw(Paw Paw::Container Exporter );
-@EXPORT = qw();
-$Paw::VERSION = "0.47";
+@Paw::Window::ISA = qw(Paw Paw::Container Exporter );
+$Paw::VERSION = "0.50";
 
 
 =head1 Window
@@ -186,7 +186,7 @@ sub new {
     my @act_wid;
     my %group;
     my %act_group;
-    my @func_keys_dflt = ( "1=", "2=", "3=", "4=", "5=", "6=", "7=", "8=", "9=Menu", "10=Quit" );
+    my @func_keys_dflt = ( '1=', '2=', '3=', '4=', '5=', '6=', '7=', '8=', '9=Menu', '10=Quit' );
 
     $this->{name}      = $params{name};    #Name des Fensters (nicht Titel)
     $this->{event_func}= (defined $params{callback})?($params{callback}):(\&Paw::Paw_main_loop);
@@ -198,8 +198,8 @@ sub new {
     $this->{quit_key}  = (defined $params{quit_key})?($params{quit_key}):(-2);
     $this->{statusbar} = (defined $params{statusbar})?($params{statusbar}):(0);
     $this->{func_keys} = (ref($params{statusbar}))?($params{statusbar}):(\@func_keys_dflt);
-    $this->{title}     = (defined $params{title})?($params{title}):("");
-    $this->{orientation}= (defined $params{orientation})?($params{orientation}):("center");
+    $this->{title}     = (defined $params{title})?($params{title}):('');
+    $this->{orientation}= (defined $params{orientation})?($params{orientation}):('center');
     $this->{time_function} = (defined $params{time_function})?($params{time_function}):();
     $this->{widgets}   = \@widgets;        #Array of all Widget Pointer
                                            #for the refresh
@@ -207,9 +207,9 @@ sub new {
                                            #for switching between Widgets
     $this->{act_hash}  = \%act_group;
     $this->{group_hash}= \%group;
-    $this->{group}     = "_default";
-    $this->{put_dir}   = "v";
-    $this->{type}      = "window";
+    $this->{group}     = '_default';
+    $this->{put_dir}   = 'v';
+    $this->{type}      = 'window';
     $this->{prev_wid}  = {rows=>0};
     $this->{is_act}    = 1;
     $this->{close_it}  = 0;
@@ -217,11 +217,11 @@ sub new {
     
     bless ($this, $class);
     if ( not defined $this->{name} ) {
-        $this->{name} = ( $this->{title} )?($this->{title}):("auto_window");
+        $this->{name} = ( $this->{title} )?($this->{title}):('auto_window');
     }
-    $this->{group_hash}->{"_default"}=\@widgets;
-    $this->{act_hash}->{"_default"}=\@act_wid;
-    $this->new_group("_menu");
+    $this->{group_hash}->{'_default'}=\@widgets;
+    $this->{act_hash}->{'_default'}=\@act_wid;
+    $this->new_group('_menu');
     return $this;
 };
 
@@ -251,12 +251,12 @@ sub set_box_pos {
     my $this = shift;
     my $widget = 0;
     
-    foreach $widgets_of_group ( values(%{$this->{group_hash}}) ) {
+    foreach my $widgets_of_group ( values(%{$this->{group_hash}}) ) {
         my @widgets_array = @{$widgets_of_group};
         my $anz_wid = @widgets_array;
         for (my $i=0; $i < $anz_wid; $i++) {
             $widget=$widgets_array[$i];
-            if ( $widget->{type} eq "box" ) {
+            if ( $widget->{type} eq 'box' ) {
                 $widget->{ax}=$this->{ax}+$widget->{wx};
                 $widget->{ay}=$this->{ay}+$widget->{wy};
                 $widget->set_box_pos();
@@ -283,7 +283,7 @@ sub prev_active {
     my $this = shift;
 
     $this->{active}->{is_act}=0;
-    $last=pop @{$this->{act_wid}};
+    my $last=pop @{$this->{act_wid}};
     unshift @{$this->{act_wid}}, $last;
     $this->{active}=$this->{act_wid}[0];
     $this->{active}->{is_act}=1;
@@ -295,12 +295,12 @@ sub key_press {
     my $this = shift;
     my $key  = $_[0];
 
-    $key = "" if ( not defined $key );
+    $key = '' if ( not defined $key );
 
     # Taste ans Widget durchreichen, wenn es die Taste
     # nicht auswerten kann, wird sie zurueckgegeben.
     $key=$this->{active}->key_press($key) if ( $this->{active}->{act_able} );
-    return "" if ( $key eq "" );
+    return '' if ( $key eq '' );
     
     if ($key eq "\t" or $key eq KEY_DOWN or $key eq KEY_RIGHT) {
         $this->next_active();
@@ -311,9 +311,9 @@ sub key_press {
         $this->prev_active();
         $key = 0;
     }
-    elsif ( $key eq KEY_F(9) and @{$this->{group_hash}->{"_menu"}} and ( not $this->{parent} or $this->{parent}->{type} ne "pull_down_menu") ) {
+    elsif ( $key eq KEY_F(9) and @{$this->{group_hash}->{'_menu'}} and ( not $this->{parent} or $this->{parent}->{type} ne 'pull_down_menu') ) {
         my $old_active=($this->{active});
-        ($this->{group} eq "_menu")?($this->activate_group("_default")) : ($this->activate_group("_menu"));
+        ($this->{group} eq '_menu')?($this->activate_group('_default')) : ($this->activate_group('_menu'));
         $this->{active}->{is_act}=1;
         $this->_refresh();
         $key=0;
@@ -330,7 +330,7 @@ sub put_dir {
     $this->{put_dir}=$_[0];
 
     # jump to the left if put_dir is set to v
-    $this->{wx} = 0 if ( $_[0] eq "v" );
+    $this->{wx} = 0 if ( $_[0] eq 'v' );
 }
 
 sub close_win {

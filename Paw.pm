@@ -5,12 +5,11 @@
 # License : GPL, see LICENSE File for further information
 require Exporter;
 use Carp;
-
-@ISA = qw(Exporter);
-@EXPORT = qw(new_widget_base);
-$Paw::VERSION = "0.47";
-
+use strict;
 package Paw;
+
+$Paw::VERSION = "0.50";
+
 use Curses;
 
 =head1 General
@@ -170,6 +169,8 @@ Paw::Menu         pulldown menus
 
 Paw::Popup        popup window with text and buttons
 
+Paw::Progressbar  a progressbar
+
 Paw::Radiobutton  a group of buttons but only one can be selected
 
 Paw::Scrollbar    scrollbar for other widgets (listbox...) no mouse support
@@ -198,9 +199,8 @@ $SIG{'__WARN__'} = sub {
             # okay, maybe I want to see a warning....
             return;
         };
-
-# Return all other errors
-warn $_;
+	# Return all other errors
+	warn $_;
     }
 };
 
@@ -210,14 +210,14 @@ sub new_widget_base {
 
     $this = {
         parent        => 0,      #Elternwidget
-        name          => "",     #Name des Widget
+        name          => '',     #Name des Widget
         rows          => 0,      #Widgethoehe
         cols          => 0,      #Widgetbreite
         wx            => 0,      #Cursorposition x
         wy            => 0,      #      "        y
-        type          => "",     #Widget Bezeichnung
+        type          => '',     #Widget Bezeichnung
         border        => 0,      #Rahmen Bit 1=AN/AUS 2=Shade/NoShade
-        direction     => "h",
+        direction     => 'h',
         is_act        => 0,
         act_able      => 0,
         wx            => 0,
@@ -226,7 +226,7 @@ sub new_widget_base {
         ay            => 0,            
         screen_cols   => COLS,
         screen_rows   => LINES,
-        #anz_pairs     => COLOR_PAIRS,   # not supportet by perl curses :-(
+        #anz_pairs    => COLOR_PAIRS,   # not supportet by perl curses :-(
         anz_pairs     => 32,
         size_is_dirty => 0,
         main_win      => 0,
@@ -250,10 +250,11 @@ sub get_name {
 
 sub set_border {
     my $this = shift;
+    my $param = shift;
 
-    $_[0] = "x" if ( not $_[0] );
+    $param = '' if ( not $param );
     $this->{border} = 1;
-    $this->{border} = $this->{border}+2 if ( $_[0] eq "shade" );
+    $this->{border} = $this->{border}+2 if ( $param eq 'shade' );
 }
 
 sub unset_border {
@@ -265,11 +266,9 @@ sub unset_border {
 sub abs_move_widget {
     my $this   = shift;
     my %params = @_;
-    my $new_x  = (defined $params{new_x}) ? ($params{new_x}):($this->{wx});
-    my $new_y  = (defined $params{new_y}) ? ($params{new_y}):($this->{wy});
 
-    $this->{wy}=$new_y;
-    $this->{wx}=$new_x;
+    $this->{wx} = $params{new_x} if defined $params{new_x};
+    $this->{wy} = $params{new_y} if defined $params{new_y};
 }
 
 sub get_widget_pos {
@@ -280,9 +279,7 @@ sub get_widget_pos {
 
 sub set_color {
     my $this = shift;
-
-    $this->{color_pair} = $_[0];
-    return;
+    $this->{color_pair} = shift;
 }
 
 #
@@ -294,9 +291,8 @@ sub catch_SIGWINCH {
     my $old_y = LINES;
     Curses::endwin();
     Curses::refresh();
-    $this->{screen_cols} = COLS;
-    $this->{screen_rows} = LINES;
-    $this->{main_win}->size_is_dirty(old_x=>$old_x, old_y=>$old_y, new_x=>COLS, new_y=>LINES);
+    @Paw::terminal_size = (COLS,LINES);
+    $Paw::main_win->size_is_dirty(old_x=>$old_x, old_y=>$old_y, new_x=>COLS, new_y=>LINES);
 }
 
 sub init_widgetset {
@@ -312,30 +308,31 @@ sub init_widgetset {
     keypad(1);
     noecho();
     $SIG{WINCH}=\&catch_SIGWINCH;  #slightly unstable ? got not reproduceable segfaults
-    init_pair(1, COLOR_WHITE, COLOR_BLUE);             #default Farben
-    init_pair($anz_pairs-1, COLOR_BLACK, COLOR_BLACK); #Schatten von Pop-Up
+    init_pair(1, COLOR_WHITE, COLOR_BLUE);             #default Color
+    init_pair($anz_pairs-1, COLOR_BLACK, COLOR_BLACK); #Shadow of Pop-Up
     init_pair($anz_pairs-2, COLOR_BLACK, COLOR_CYAN);  #Pulldown Menu
     init_pair($anz_pairs-3, COLOR_BLACK, COLOR_BLUE);  #Filedialog
     halfdelay(1);
+    @Paw::terminal_size = (COLS,LINES);
     return (COLS,LINES);
 }
 
 sub Paw_main_loop {
-    
-    my $main_win = $_[0];
+    my $main_win = shift;
+    $Paw::main_win = $main_win;
 
-    my $i = "";
+    my $i = '';
     $main_win->_refresh();
     while ( not $main_win->{close_it} and ($i ne $main_win->{quit_key}) ) {
-        $this->{main_win} = $main_win;
+#        $this->{main_win} = $main_win;
         $i = getch();              # Tastendruck einlesen
-        &{$main_win->{time_function}} if ( defined $main_win->{time_function} );
+        &{$main_win->{time_function}} if defined $main_win->{time_function};
         if ( $i ne -1 ) {
             $main_win->key_press($i);  # Taste sofort ans Widgetset
             $main_win->_refresh();
         }
         else {
-            $main_win->_refresh() if ( defined $main_win->{time_function} );
+            $main_win->_refresh() if defined $main_win->{time_function};
         }
     };
     Curses::clear();

@@ -5,12 +5,10 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Penguin;
 use Curses;
+use strict;
 
-@Paw::ISA = qw(Exporter);
-@ISA = qw(Paw);
-@Paw::EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Penguin::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 sub new {
@@ -18,10 +16,10 @@ sub new {
     my $this   = Paw::new_widget_base;
     my %params = @_;
 
-    $this->{name}      = (defined $params{name})?($params{name}):("tux");    #Name des Fensters (nicht Titel)
+    $this->{name}      = (defined $params{name})?($params{name}):('tux');    #Name des Fensters (nicht Titel)
     $this->{cols}      = 4;
     $this->{rows}      = 3;
-    $this->{direction} = "v",
+    $this->{direction} = 'v',
     bless ($this, $class);
     return $this;
 }
@@ -29,7 +27,7 @@ sub new {
 sub draw {
     my $this = shift;
     my $line = shift;
-    my @box = (" -o)", " /\\\\", "_\\_v");
+    my @box = (' -o)', " /\\\\", "_\\_v");
 
     addstr($box[$line]);
 

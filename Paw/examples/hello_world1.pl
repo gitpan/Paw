@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #########################################################################
 # Copyright (c) 1999 SuSE Gmbh Nuernberg, Germany.  All rights reserved.
 #
@@ -44,6 +44,7 @@ init_pair(2, COLOR_WHITE, COLOR_RED);
 $win=Paw::Window->new(abs_x=>10, abs_y=>5, height=>$rows-10 , width=>$columns-20, color=>2);
 $win->set_border("shade");
 ($wcols, $wrows, $wcolor)=$win->get_window_parameter();
+$wcolor = $wcolor; #avoid warning
 $win->abs_move_curs(new_x=>$wcols/2-5, new_y=>$wrows/2);
 $win0->close_win(); # window will never get focus
 $win0->raise();

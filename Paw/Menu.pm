@@ -5,13 +5,12 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Menu;
 use Curses;
+use strict;
 use Paw::Window;
 use Paw::Button;
 
-@ISA = qw(Exporter Paw);
-@EXPORT = qw(
-);
-$Paw::VERSION = "0.47";
+@Paw::Menu::ISA = qw(Paw);
+$Paw::VERSION = "0.50";
 
 
 =head1 Pulldown Menu
@@ -50,19 +49,19 @@ sub new {
     my %params = @_;
     my @points = ();
 
-    $this->{name}      = (defined $params{name})?($params{name}):("_auto_"."menu");    #Name des Fensters (nicht Titel)
+    $this->{name}      = (defined $params{name})?($params{name}):('_auto_menu');    #Name des Fensters (nicht Titel)
     $this->{title}    = $params{title};
     $this->{shade}    = $params{border};
     $this->{act_able} = 1;
     $this->{rows}     = 1;
     $this->{points}   = \@points;
-    $this->{type}     = "pull_down_menu";
-    $this->{window}   = Paw::Window->new(name=>"auto_pulldown_window", callback=>(\&_menu_callback), abs_x=>0, abs_y=>0, height=>-1, width=>0, color=>$this->{anz_pairs}-2);
+    $this->{type}     = 'pull_down_menu';
+    $this->{window}   = Paw::Window->new(name=>'auto_pulldown_window', callback=>(\&_menu_callback), abs_x=>0, abs_y=>0, height=>-1, width=>0, color=>$this->{anz_pairs}-2);
     $this->{callback} = \&_menu_callback;
     $this->{color_pair} = $this->{anz_pairs}-2;
     
     $this->{window}->{parent} = $this;
-    $this->{window}->put_dir("v");
+    $this->{window}->put_dir('v');
     $this->{window}->set_border($params{border});
 
     bless ($this, $class);
@@ -72,11 +71,11 @@ sub new {
 }
 
 sub _menu_callback {
-    my $key  = "x";
-    my $this = $_[0];
+    my $this = shift;
+    my $key  = 'x';
 
     #    $this->{parent}->{active}=$this;
-    while ( $key ne KEY_LEFT and $key ne KEY_RIGHT and unpack ("C",$key) ne "27" and $key ne "\n") {
+    while ( $key ne KEY_LEFT and $key ne KEY_RIGHT and unpack ('C',$key) ne '27' and $key ne "\n") {
         $key = getch();
         $this->key_press($key);
         $this->{parent}->{parent}->_refresh();
@@ -90,19 +89,19 @@ sub _menu_callback {
     # in einem PullDownMenu, dann wird ein PDM zurueck geschaltet
     # - alles klar ?
     #
-    if ( $key eq KEY_LEFT and (not $this->{parent}->{parent}->{parent} or $this->{parent}->{parent}->{parent}->{type} ne "pull_down_menu") ) {
+    if ( $key eq KEY_LEFT and (not $this->{parent}->{parent}->{parent} or $this->{parent}->{parent}->{parent}->{type} ne 'pull_down_menu') ) {
         $this->next_active();
         $this->{parent}->{parent}->prev_active();
         $this->{parent}->{parent}->{active}->{opened}=1;
     }
-    elsif ( $key eq KEY_RIGHT and (not $this->{parent}->{parent}->{parent} or $this->{parent}->{parent}->{parent}->{type} ne "pull_down_menu") ) {
+    elsif ( $key eq KEY_RIGHT and (not $this->{parent}->{parent}->{parent} or $this->{parent}->{parent}->{parent}->{type} ne 'pull_down_menu') ) {
         $this->prev_active();
         $this->{parent}->{parent}->next_active();
         $this->{parent}->{parent}->{active}->{opened}=1;
     }
     else {
         $this->{parent}->{parent}->{active}->{opened}=0;
-        $this->{parent}->{parent}->activate_group("_default");
+        $this->{parent}->{parent}->activate_group('_default');
         $this->{parent}->{parent}->{active}->{is_act}=1;
     }
     return;
@@ -110,31 +109,32 @@ sub _menu_callback {
 
 sub add_menu_point {
     my $this     = shift;
-    my $label    = $_[0];
+    my $point    = shift;
     my $anz      = @{$this->{points}};
     my $widget   = 0;
+    my $callback;
 
-    if ( ref $_[0] ) {
-        $widget = $_[0];
+    if ( ref $point ) {
+        $widget = $point;
         $callback = $widget->{callback};
         if ( $widget->{cols} > $this->{cols} ) {
             $this->{cols} = $widget->{cols};
             $this->{window}->{cols} = $this->{cols};
         }
         # PDM in PDM ?
-        if ( $widget->{type} eq "pull_down_menu" ) {
-            $widget->{title} = $widget->{title} . " -->";
+        if ( $widget->{type} eq 'pull_down_menu' ) {
+            $widget->{title} = $widget->{title} . ' -->';
             $widget->{window}->{ax} = $this->{window}->{cols}+3;
             $widget->{window}->{ay} = $this->{window}->{rows}+2+3;
         }
     }
     else {
-        $callback=$_[1];
-        if ( (length $label) > ($this->{window}->{cols}-2) ) {
-            $this->{cols} = (length $label);
+        $callback=shift;
+        if ( (length $point) > ($this->{window}->{cols}-2) ) {
+            $this->{cols} = (length $point);
             $this->{window}->{cols} = $this->{cols}+2;
         }
-        $widget=Paw::Button->new(name=>"auto_button_$label", text=>$label, callback=>$callback);
+        $widget=Paw::Button->new(name=>"auto_button_$point", text=>$point, callback=>$callback);
     }
     $this->{window}->{rows} = $this->{window}->{rows}+$widget->{rows};
     $this->{window}->put($widget);
@@ -154,15 +154,15 @@ sub draw {
     }
     attron(A_REVERSE) if ( $this->{is_act} );
     attron(COLOR_PAIR($this->{color_pair}));
-    addstr("$title");
+    addstr($title);
 }
 
 sub key_press {
     my $this = shift;
     my $key  = shift;
 
-    while ( $key eq " " or $key eq "\n" or $this->{parent}->{active}->{opened}) {
-        $key = "";
+    while ( $key eq ' ' or $key eq "\n" or $this->{parent}->{active}->{opened}) {
+        $key = '';
         $this->{parent}->{active}->{window}->raise();
     }
     return $key;
