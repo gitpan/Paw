@@ -1,9 +1,16 @@
+0.53 - 0.54
++ some deprecated stuff fixed
+
+0.52 - 0.53
++ selection out of box bug in Popup_menu fixed
+
 0.50 - 0.52 
 + Popup_menu widget added (perldoc Popup_menu)
 + added cursor_color option for Text_entry and Textbox
 + german documentation outdated. If you really need it,
   please tell me
 + abs_x, abs_y parameter for Popup Widget added
++ minor bugfixes
 
 0.47 - 0.50
 + code cleanup 

@@ -29,7 +29,7 @@ my $win=Paw::Window->new(quit_key=>KEY_F(10), height=>$rows, width=>$columns,
 
 $win->abs_move_curs(new_x=>5,new_y=>5);
 $win->put($pop);
-$pop->set_choice(2);
+$pop->set_choice(6);
 $win->put($label);
 
 # generate a listbox with border - self explaining.

@@ -4,12 +4,10 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Listbox;
-use Curses;
 use strict;
 
 @Paw::Listbox::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
-
+use Curses;
 
 =head1 Listbox
 
@@ -197,7 +195,7 @@ sub change_rows {
     my $pos_a = shift;
     my $pos_b = shift;
 
-    @{$this->{data}}->[$pos_a] = $pos_b;
+    $this->{data}->[$pos_a] = $pos_b;
     my $dummy=$this->{pushed}->[$pos_a];
     $this->{pushed}->[$pos_a]=$this->{pushed}->[$pos_b];
     $this->{pushed}->[$pos_b]=$dummy;

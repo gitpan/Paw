@@ -48,9 +48,8 @@ B<Example>
 =cut
 
 package Paw::Textbox;
-use Curses;
 use strict;
-
+use Curses;
 @Paw::Textbox::ISA = qw(Paw);
 
 sub new {

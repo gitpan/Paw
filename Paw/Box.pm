@@ -7,11 +7,10 @@
 package Paw::Box;
 
 use strict;
-use Curses;
 use Paw::Container;
+use Curses;
 
 @Paw::Box::ISA = qw(Exporter Paw Paw::Container);
-$Paw::VERSION = "0.50";
 
 =head1 Box Widget
 
@@ -127,7 +126,7 @@ sub set_box_pos {
     my $anz_wid = @{$this->{widgets}};
 
     for (my $i=0; $i < $anz_wid; $i++) {
-        my $widget=@{$this->{widgets}}->[$i];
+        my $widget=$this->{widgets}->[$i];
         if ( $widget->{type} eq 'box' ) {
             $widget->{ax}=$this->{ax}+$widget->{wx};
             $widget->{ay}=$this->{ay}+$widget->{wy};

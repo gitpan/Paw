@@ -4,14 +4,12 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Menu;
-use Curses;
 use strict;
 use Paw::Window;
 use Paw::Button;
 
 @Paw::Menu::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
-
+use Curses;
 
 =head1 Pulldown Menu
 

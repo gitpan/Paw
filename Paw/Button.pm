@@ -5,10 +5,9 @@
 # License : GPL, see LICENSE File for further information
 
 package Paw::Button;
-use Curses;
 use strict;
 @Paw::Button::ISA = qw(Exporter Paw);
-$Paw::VERSION = "0.50";
+use Curses;
 
 =head1 Button Widget
 

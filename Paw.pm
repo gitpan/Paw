@@ -8,7 +8,7 @@ use Carp;
 use strict;
 package Paw;
 
-$Paw::VERSION = "0.52";
+$Paw::VERSION = "0.54";
 
 use Curses;
 

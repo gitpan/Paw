@@ -4,11 +4,9 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Penguin;
-use Curses;
 use strict;
-
+use Curses;
 @Paw::Penguin::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
 
 
 sub new {

@@ -4,14 +4,12 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Popup;
-use Curses;
 use strict;
 use Paw::Button;
 use Paw::Textbox;
 use Paw::Window;
 
 @Paw::Popup::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
 
 =head1 Popup Window
 
@@ -126,14 +124,14 @@ sub _callback {
     my $this = shift;
 
     for ( my $i=0; $i < @{$this->{parent}->{buttons}}; $i++ ) {
-        @{$this->{parent}->{buttons}}->[$i]->release_button();
+        $this->{parent}->{buttons}->[$i]->release_button();
     }
     while ( 1 ) {
         my $key = getch();
         if ( $key ne -1 ) {
             $this->key_press($key);
             for ( my $i=0; $i < @{$this->{parent}->{buttons}}; $i++ ) {
-                return $i if ( @{$this->{parent}->{buttons}}->[$i]->is_pressed() );
+                return $i if ( $this->{parent}->{buttons}->[$i]->is_pressed() );
             }
         }
     }

@@ -4,10 +4,9 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Statusbar;
-use Curses;
 
 @Paw::Statusbar::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
+use Curses;
 
 sub new {
     my $class  = shift;

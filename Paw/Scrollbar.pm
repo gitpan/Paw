@@ -4,12 +4,10 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Scrollbar;
-use Curses;
 use strict;
 
 @Paw::Scrollbar::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
-
+use Curses;
 
 =head1 Scrollbar
 

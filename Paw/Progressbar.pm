@@ -5,11 +5,10 @@
 # License : GPL, see LICENSE File for further information
 
 package Paw::Progressbar;
-use Curses;
 use strict;
 
 @Paw::Progressbar::ISA=qw(Paw);
-$Paw::VERSION = "0.50";
+use Curses;
 
 =head1 Button Widget
 

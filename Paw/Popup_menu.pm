@@ -9,7 +9,7 @@ use Curses;
 use strict;
 use Paw::Window;
 use Paw::Listbox;
-
+use Curses;
 @Paw::Menu::ISA = qw(Paw);
 
 =head1 Listbox
@@ -130,8 +130,12 @@ sub get_choice {
 
 sub set_choice {
     my $this = shift;
+    my $choice = shift;
+    my $box_rows = $this->{listbox}->{rows};
 
-    $this->{listbox}->{active_row} = shift;
+    $choice = $this->{listbox}->number_of_data()-1 if ( $choice >= $this->{listbox}->number_of_data() );
+    $this->{listbox}->{view_start_y} = $choice;
+    $this->{listbox}->{active_row} = $choice;
 }
 
 sub draw {

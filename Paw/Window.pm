@@ -5,14 +5,12 @@
 # License : GPL, see LICENSE File for further information
 package Paw::Window;
 use strict;
-use Curses;
 use Paw::Container;
 use Paw::Box;
 use Paw::Statusbar;
 
 @Paw::Window::ISA = qw(Paw Paw::Container Exporter );
-$Paw::VERSION = "0.50";
-
+use Curses;
 
 =head1 Window
 

@@ -4,11 +4,10 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Line;
-use Curses;
 use strict;
 
 @Paw::Line::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
+use Curses;
 
 =head1 Line Widget
 

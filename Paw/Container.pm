@@ -5,11 +5,10 @@
 # License : GPL, see LICENSE File for further information
 
 package Paw::Container;
-use Curses;
 
 @ISA = qw(Exporter);
 @EXPORT = qw();
-$Paw::VERSION = "0.50";
+use Curses;
 
 sub draw_border {
     my $this  = shift;

@@ -4,11 +4,10 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Text_entry;
-use Curses;
 use strict;
 
 @Paw::Text_entry::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
+use Curses;
 
 =head1 Textentry Widget
 

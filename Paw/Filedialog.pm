@@ -4,7 +4,6 @@
 # Author  : Uwe Gansert <ug@suse.de>
 # License : GPL, see LICENSE File for further information
 package Paw::Filedialog;
-use Curses;
 use strict;
 require Paw::Window;
 require Paw::Listbox;
@@ -13,9 +12,9 @@ require Paw::Label;
 require Paw::Text_entry;
 require Paw::Line;
 require Paw::Scrollbar;
+use Curses;
 
 @Paw::Filedialog::ISA = qw(Paw);
-$Paw::VERSION = "0.50";
 
 
 =head1 Filedialog
