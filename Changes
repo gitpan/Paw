@@ -1,0 +1,29 @@
+0.3 - 0.4
++ splitted into single files
++ Makefile added
++ Tests added
++ english documentation
++ license set to GPL
++ loading up to CPAN
+
+0.2 - 0.3
++ set_focus Method added
++ Documentation added
++ heavy changes in box/window Code
++ Terminal resize handler added
++ Timefunction added
++ minor bugfixes
+
+0.1 - 0.2
++ Textfield added (read only)
++ Popup Box added
++ Boxes (packer) added
++ File Dialog added
++ main_loop Function added.
++ Statusbar added
++ examples added
++ window-titel added
++ heavy changes in key-press handling
++ heavy changes in draw widget routine
++ color for rows of a listbox added
++ minor bugfixes
